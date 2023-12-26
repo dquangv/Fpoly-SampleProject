@@ -9,6 +9,7 @@ package Model;
  * @author Quang
  */
 public class Employee {
+
     private String maNV, matKhau, hoTen;
     private boolean vaiTro = false;
 
@@ -52,8 +53,15 @@ public class Employee {
     public void setVaiTro(boolean vaiTro) {
         this.vaiTro = vaiTro;
     }
-    
+
     public String toString() {
         return this.hoTen;
+    }
+
+    public int getVaiTro() {
+        if (this.vaiTro) {
+            return 0;
+        }
+        return 1;
     }
 }
