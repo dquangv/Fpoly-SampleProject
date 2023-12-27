@@ -87,7 +87,7 @@ public class LearnerDAO {
     }
     
     public Learner findById(String maNH) {
-        String sql = "select * from nguoihoc where manguoihoc = ?;";
+        String sql = "select * from nguoihoc where manguoihoc like ?;";
         List<Learner> list = select(sql, maNH);
         
         return list.size() > 0 ? list.get(0) : null;
