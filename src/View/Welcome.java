@@ -26,7 +26,8 @@ public class Welcome extends javax.swing.JDialog {
             public void actionPerformed(ActionEvent e) {
                 int value = pgbWelcome.getValue();
                 if (value < 100) {
-                    System.out.println(value);
+                    value += 1;
+                    pgbWelcome.setValue(value + 1);
                 } else {
                     Welcome.this.dispose();
                 }

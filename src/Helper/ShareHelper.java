@@ -7,6 +7,7 @@ package Helper;
 import Model.Employee;
 import java.awt.Image;
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,16 +20,15 @@ import javax.swing.ImageIcon;
  */
 public class ShareHelper {
 
-    public static final Image appIcon;
     public static Employee user = null;
 
-    static {
-        String file = "C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\src\\Icons\\Hinh\\fpt.png";
-        appIcon = new ImageIcon(ShareHelper.class.getResource(file)).getImage();
+    public static Image appIcon() {
+        URL url = ShareHelper.class.getResource("/Icons/Hinh/fpt.png");
+        return new ImageIcon(url).getImage();
     }
 
     public static boolean saveLogo(File file) {
-        File dir = new File("Logos");
+        File dir = new File("src\\Icons\\Logos",file.getName());
 
         if (!dir.exists()) {
             dir.mkdirs();
@@ -48,7 +48,7 @@ public class ShareHelper {
     }
 
     public static ImageIcon readLogo(String fileName) {
-        File path = new File("logos", fileName);
+        File path = new File("src\\Icons\\Logos", fileName);
         return new ImageIcon(path.getAbsolutePath());
     }
 
