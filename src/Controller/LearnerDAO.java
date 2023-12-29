@@ -24,9 +24,9 @@ public class LearnerDAO {
         JdbcHelper.executeUpdate(sql, model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(), model.getMaNH());
     }
     
-    public void delete(Learner model) throws SQLException {
+    public void delete(String maNH) throws SQLException {
         String sql = "delete from nguoihoc where manguoihoc = ?";
-        JdbcHelper.executeUpdate(sql, model.getMaNH());
+        JdbcHelper.executeUpdate(sql, maNH);
     }
     
     private Learner readFromResultSet(ResultSet rs) throws SQLException {

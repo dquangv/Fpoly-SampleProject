@@ -26,9 +26,9 @@ public class ThematicDAO {
         JdbcHelper.executeUpdate(sql, model.getTenCD(), model.getHocPhi(), model.getThoiLuong(), model.getHinh(), model.getMoTa(), model.getMaCD());
     }
     
-    public void delete(Thematic model) throws SQLException {
+    public void delete(String maCD) throws SQLException {
         String sql = "delete from chuyende where machuyende = ?";
-        JdbcHelper.executeUpdate(sql, model.getMaCD());
+        JdbcHelper.executeUpdate(sql, maCD);
     }
     
     private Thematic readFromResultSet(ResultSet rs) throws SQLException {
