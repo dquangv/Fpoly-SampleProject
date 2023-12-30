@@ -36,6 +36,11 @@ public class Introduction extends javax.swing.JDialog {
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(512, 505));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -73,6 +78,10 @@ public class Introduction extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        this.dispose();
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * @param args the command line arguments

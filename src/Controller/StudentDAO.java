@@ -26,9 +26,9 @@ public class StudentDAO {
         JdbcHelper.executeUpdate(sql, model.getMaKH(), model.getMaNH(), model.getDiem(), model.getMaHV());
     }
 
-    public void delete(Student model) throws SQLException {
+    public void delete(Integer maHV) throws SQLException {
         String sql = "delete from hocvien where mahocvien = ?;";
-        JdbcHelper.executeUpdate(sql, model.getMaHV());
+        JdbcHelper.executeUpdate(sql, maHV);
     }
 
     private Student readFromResultSet(ResultSet rs) throws SQLException {

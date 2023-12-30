@@ -4,17 +4,125 @@
  */
 package View;
 
+import Controller.CourseDAO;
+import Controller.StatisticsDAO;
+import Helper.ShareHelper;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Quang
  */
 public class Statistics extends javax.swing.JFrame {
 
+    StatisticsDAO dao = new StatisticsDAO();
+    CourseDAO khdao = new CourseDAO();
+    int tabIndex = 0;
+    
     /**
      * Creates new form Statistics
      */
     public Statistics() {
         initComponents();
+        tabs.setSelectedIndex(tabIndex);
+        init();
+    }
+    
+    public void init() {
+        setIconImage(ShareHelper.appIcon());
+        setLocationRelativeTo(null);
+    }
+    
+    public void fillComboBoxKhoaHoc() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboKhoaHoc.getModel();
+        
+        model.removeAllElements();
+        
+        List<Model.Course> list = khdao.select();
+        
+        for (Model.Course kh : list) {
+            model.addElement(kh);
+        }
+        
+        cboKhoaHoc.setSelectedIndex(0);
+    }
+    
+    public void fillComboBoxNam() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboNam.getModel();
+        
+        model.removeAllElements();
+        
+        List<Model.Course> list = khdao.select();
+        
+        for (Model.Course kh : list) {
+            Date ngayKG = kh.getNgayKG();
+            LocalDate localDate = ngayKG.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int nam = localDate.getYear();
+            
+            if (model.getIndexOf(nam) < 0) {
+                model.addElement(nam);
+            }
+        }
+        
+        cboNam.setSelectedIndex(0);
+    }
+    
+    public void fillTableBangDiem() {
+        DefaultTableModel model = (DefaultTableModel) tblBangDiem.getModel();
+        
+        model.setRowCount(0);
+        
+        Model.Course kh = (Model.Course) cboKhoaHoc.getSelectedItem();
+        
+        List<Object[]> list = dao.getBangDiem(kh.getMaKH());
+        
+        for (Object[] row: list) {
+            model.addRow(row);
+        }
+    }
+    
+    public void fillTableNguoiHoc() {
+        DefaultTableModel model = (DefaultTableModel) tblNguoiHoc.getModel();
+        
+        model.setRowCount(0);
+        
+        List<Object[]> list = dao.getNguoiHoc();
+        
+        for (Object[] row : list) {
+            model.addRow(row);
+        }
+    }
+    
+    public void fillTableKhoaHoc() {
+        DefaultTableModel model = (DefaultTableModel) tblKhoaHoc.getModel();
+        
+        
+        model.setRowCount(0);
+        
+        List<Object[]> list = dao.getDiemTheoChuyenDe();
+        
+        for (Object[] row : list) {
+            model.addRow(row);
+        }
+    }
+    
+    public void fillTableDoanhThu() {
+        DefaultTableModel model = (DefaultTableModel) tblDoanhThu.getModel();
+        
+        model.setRowCount(0);
+        
+        int nam = Integer.parseInt(cboNam.getSelectedItem().toString());
+        
+        List<Object[]> list = dao.getDoanhThu(nam);
+        
+        for (Object[] row : list) {
+            model.addRow(row);
+        }
     }
 
     /**
@@ -27,32 +135,37 @@ public class Statistics extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabs = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblNguoiHoc = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cboKhoaHoc = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tblBangDiem = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        tblKhoaHoc = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboNam = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblDoanhThu = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TỔNG HỢP THỐNG KÊ");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
         jLabel1.setText("TỔNG HỢP THỐNG KÊ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblNguoiHoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -68,7 +181,7 @@ public class Statistics extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblNguoiHoc);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -87,11 +200,11 @@ public class Statistics extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("NGƯỜI HỌC", jPanel1);
+        tabs.addTab("NGƯỜI HỌC", jPanel1);
 
         jLabel3.setText("KHOÁ HỌC:");
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblBangDiem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -107,7 +220,7 @@ public class Statistics extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tblBangDiem);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -120,7 +233,7 @@ public class Statistics extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cboKhoaHoc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -129,15 +242,15 @@ public class Statistics extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboKhoaHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("BẢNG ĐIỂM", jPanel2);
+        tabs.addTab("BẢNG ĐIỂM", jPanel2);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        tblKhoaHoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -153,7 +266,7 @@ public class Statistics extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable4);
+        jScrollPane4.setViewportView(tblKhoaHoc);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -172,11 +285,11 @@ public class Statistics extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("TỔNG HỢP ĐIỂM", jPanel3);
+        tabs.addTab("TỔNG HỢP ĐIỂM", jPanel3);
 
         jLabel2.setText("NĂM:");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblDoanhThu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -192,7 +305,7 @@ public class Statistics extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblDoanhThu);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -205,7 +318,7 @@ public class Statistics extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cboNam, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -214,13 +327,13 @@ public class Statistics extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboNam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("DOANH THU", jPanel4);
+        tabs.addTab("DOANH THU", jPanel4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,7 +342,7 @@ public class Statistics extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -239,12 +352,21 @@ public class Statistics extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        fillComboBoxKhoaHoc();
+        fillTableBangDiem();
+        fillTableNguoiHoc();
+        fillTableKhoaHoc();
+        fillComboBoxNam();
+        fillTableDoanhThu();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -257,7 +379,7 @@ public class Statistics extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -282,8 +404,8 @@ public class Statistics extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> cboKhoaHoc;
+    private javax.swing.JComboBox<String> cboNam;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -295,10 +417,10 @@ public class Statistics extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
+    private javax.swing.JTabbedPane tabs;
+    private javax.swing.JTable tblBangDiem;
+    private javax.swing.JTable tblDoanhThu;
+    private javax.swing.JTable tblKhoaHoc;
+    private javax.swing.JTable tblNguoiHoc;
     // End of variables declaration//GEN-END:variables
 }

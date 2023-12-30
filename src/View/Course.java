@@ -200,7 +200,7 @@ public class Course extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabs = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         cboChuyenDe = new javax.swing.JComboBox<>();
@@ -232,6 +232,11 @@ public class Course extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("QUẢN LÝ KHOÁ HỌC");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
@@ -420,7 +425,7 @@ public class Course extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("CẬP NHẬT", jPanel1);
+        tabs.addTab("CẬP NHẬT", jPanel1);
 
         tblCourse.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -436,6 +441,11 @@ public class Course extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblCourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCourseMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tblCourse);
@@ -457,7 +467,7 @@ public class Course extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("DANH SÁCH", jPanel2);
+        tabs.addTab("DANH SÁCH", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -466,7 +476,7 @@ public class Course extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addComponent(tabs)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -478,7 +488,7 @@ public class Course extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1)
+                .addComponent(tabs)
                 .addContainerGap())
         );
 
@@ -524,6 +534,24 @@ public class Course extends javax.swing.JFrame {
     private void btnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentActionPerformed
         openHocVien();
     }//GEN-LAST:event_btnStudentActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        this.fillComboBox();
+        this.load();
+        this.clear();
+        this.setStatus(true);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void tblCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCourseMouseClicked
+        if (evt.getClickCount() == 2) {
+            this.index = tblCourse.rowAtPoint(evt.getPoint());
+            
+            if (this.index >= 0) {
+                this.edit();
+                tabs.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_tblCourseMouseClicked
 
     /**
      * @param args the command line arguments
@@ -586,7 +614,7 @@ public class Course extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane tabs;
     private javax.swing.JTable tblCourse;
     private javax.swing.JTextArea txtGhiChu;
     private javax.swing.JTextField txtHocPhi;
