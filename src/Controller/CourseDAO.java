@@ -26,9 +26,9 @@ public class CourseDAO {
         JdbcHelper.executeUpdate(sql, model.getMaCD(), model.getHocPhi(), model.getThoiLuong(), model.getNgayKG(), model.getGhiChu(), model.getMaNV(), model.getMaKH());
     }
 
-    public void delete(Course model) throws SQLException {
+    public void delete(int maKH) throws SQLException {
         String sql = "delete from khoahoc where makhoahoc = ?;";
-        JdbcHelper.executeUpdate(sql, model.getMaKH());
+        JdbcHelper.executeUpdate(sql, maKH);
     }
 
     private Course readFromResultSet(ResultSet rs) throws SQLException {

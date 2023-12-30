@@ -4,17 +4,190 @@
  */
 package View;
 
+import Controller.CourseDAO;
+import Controller.ThematicDAO;
+import Helper.DateHelper;
+import Helper.DialogHelper;
+import Helper.ShareHelper;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Quang
  */
 public class Course extends javax.swing.JFrame {
 
+    int index = 0;
+    CourseDAO dao = new CourseDAO();
+    ThematicDAO cddao = new ThematicDAO();
+
     /**
      * Creates new form Course
      */
     public Course() {
         initComponents();
+        init();
+    }
+    
+    public void init() {
+        setIconImage(ShareHelper.appIcon());
+        setLocationRelativeTo(null);
+    }
+    
+    public void load() {
+        DefaultTableModel model = (DefaultTableModel) tblCourse.getModel();
+        
+        model.setRowCount(0);
+        
+        try {
+            List<Model.Course> list = dao.select();
+            
+            for (Model.Course kh : list) {
+                Object[] row = {kh.getMaKH(), kh.getMaCD(), kh.getThoiLuong(), kh.getHocPhi(), DateHelper.toString(kh.getNgayKG()), kh.getMaNV(), DateHelper.toString(kh.getNgayTao())};
+                model.addRow(row);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void setModel(Model.Course model) {
+        cboChuyenDe.setToolTipText(String.valueOf(model.getMaKH()));
+        cboChuyenDe.setSelectedItem(cddao.findById(model.getMaCD()));
+        dayNgayKG.setDate(model.getNgayKG());
+        txtHocPhi.setText(String.valueOf(model.getHocPhi()));
+        txtThoiLuong.setText(String.valueOf(model.getThoiLuong()));
+        txtMaNV.setText(model.getMaNV());
+        txtGhiChu.setText(model.getGhiChu());
+    }
+    
+    public Model.Course getModel() {
+        Model.Course model = new Model.Course();
+        Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
+        
+        model.setMaCD(thematic.getMaCD());
+        model.setNgayKG(dayNgayKG.getDate());
+        model.setHocPhi(Double.parseDouble(txtHocPhi.getText()));
+        model.setThoiLuong(Integer.parseInt(txtThoiLuong.getText()));
+        model.setGhiChu(txtGhiChu.getText());
+        model.setMaNV(ShareHelper.user.getMaNV());
+        model.setNgayTao(dayNgayTao.getDate());
+        model.setMaKH(Integer.parseInt(cboChuyenDe.getToolTipText()));
+        
+        return model;
+    }
+    
+    public void setStatus(boolean check) {
+        btnInsert.setEnabled(check);
+        btnUpdate.setEnabled(!check);
+        btnDelete.setEnabled(!check);
+        
+        boolean first = this.index > 0;
+        boolean last = this.index < tblCourse.getRowCount() - 1;
+        
+        btnFirst.setEnabled(!check && first);
+        btnPrev.setEnabled(!check && first);
+        btnNext.setEnabled(!check && last);
+        btnLast.setEnabled(!check && last);
+        
+        btnStudent.setVisible(!check);
+    }
+    
+    public void clear() {
+        Model.Course model = new Model.Course();
+        Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
+        
+        model.setMaCD(thematic.getMaCD());
+        model.setMaNV(ShareHelper.user.getMaNV());
+        model.setNgayKG(DateHelper.add(30));
+        model.setNgayTao(DateHelper.now());
+    }
+    
+    public void selectComboBox() {
+        Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
+        txtThoiLuong.setText(String.valueOf(thematic.getThoiLuong()));
+        txtHocPhi.setText(String.valueOf(thematic.getHocPhi()));
+    }
+    
+    public void openHocVien() {
+        Integer id = Integer.parseInt(cboChuyenDe.getToolTipText());
+        
+        new Student().setVisible(true);
+    }
+    
+    public void fillComboBox() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboChuyenDe.getModel();
+        
+        model.removeAllElements();
+        
+        try {
+            List<Model.Thematic> list = cddao.select();
+            
+            for (Model.Thematic cd : list) {
+                model.addElement(cd);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void insert() {
+        Model.Course model = getModel();
+        
+        model.setNgayTao(new Date());
+        
+        try {
+            dao.insert(model);
+            this.load();
+            this.clear();
+            DialogHelper.alert(this, "Thêm mới thành công!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void update() {
+        Model.Course model = getModel();
+        
+        try {
+            dao.update(model);
+            this.load();
+            DialogHelper.alert(this, "Cập nhật thành công!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void delete() {
+        if (DialogHelper.confirm(this, "Bạn có chắc muốn xoá khoá học này không?")) {
+            int maKH = Integer.parseInt(cboChuyenDe.getToolTipText());
+            
+            try {
+                dao.delete(maKH);
+                this.load();
+                this.clear();
+                DialogHelper.alert(this, "Xoá thành công!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    public void edit() {
+        try {
+            Integer maKH = (Integer) tblCourse.getValueAt(this.index, 0);
+            Model.Course model = dao.findById(maKH);
+            
+            if (model != null) {
+                this.setModel(model);
+                this.setStatus(false);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -32,18 +205,18 @@ public class Course extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         cboChuyenDe = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dayNgayKG = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtHocPhi = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtThoiLuong = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtMaNV = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        dayNgayTao = new com.toedter.calendar.JDateChooser();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtGhiChu = new javax.swing.JTextArea();
         btnInsert = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
@@ -52,6 +225,7 @@ public class Course extends javax.swing.JFrame {
         btnPrev = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         btnLast = new javax.swing.JButton();
+        btnStudent = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCourse = new javax.swing.JTable();
@@ -71,45 +245,88 @@ public class Course extends javax.swing.JFrame {
 
         jLabel4.setText("Học phí");
 
-        jTextField1.setEnabled(false);
+        txtHocPhi.setEnabled(false);
 
         jLabel5.setText("Thời lượng (giờ)");
 
-        jTextField2.setEnabled(false);
+        txtThoiLuong.setEnabled(false);
 
         jLabel6.setText("Người tạo");
 
-        jTextField3.setEnabled(false);
+        txtMaNV.setEnabled(false);
 
         jLabel7.setText("Ngày tạo");
 
-        jDateChooser2.setEnabled(false);
+        dayNgayTao.setEnabled(false);
 
         jLabel8.setText("Ghi chú");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtGhiChu.setColumns(20);
+        txtGhiChu.setRows(5);
+        jScrollPane1.setViewportView(txtGhiChu);
 
         btnInsert.setText("Thêm");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Xoá");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Sửa");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnClear.setText("Mới");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         btnFirst.setText("|<");
-        btnFirst.setEnabled(false);
+        btnFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirstActionPerformed(evt);
+            }
+        });
 
         btnPrev.setText("<<");
-        btnPrev.setEnabled(false);
+        btnPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevActionPerformed(evt);
+            }
+        });
 
         btnNext.setText(">>");
-        btnNext.setEnabled(false);
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
 
         btnLast.setText(">|");
-        btnLast.setEnabled(false);
+        btnLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLastActionPerformed(evt);
+            }
+        });
+
+        btnStudent.setText("Học viên");
+        btnStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStudentActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -119,42 +336,44 @@ public class Course extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cboChuyenDe, javax.swing.GroupLayout.Alignment.LEADING, 0, 304, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(jTextField2)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6)
+                            .addComponent(cboChuyenDe, 0, 346, Short.MAX_VALUE)
+                            .addComponent(txtHocPhi)
+                            .addComponent(txtMaNV)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtThoiLuong)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dayNgayTao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                            .addComponent(dayNgayKG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnInsert)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelete)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnClear)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnStudent)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                        .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLast, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(btnInsert)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnDelete)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnUpdate)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnClear)
-                            .addGap(93, 93, 93)
-                            .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnLast, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,23 +385,23 @@ public class Course extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cboChuyenDe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dayNgayKG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtHocPhi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtThoiLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dayNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -196,7 +415,8 @@ public class Course extends javax.swing.JFrame {
                     .addComponent(btnFirst)
                     .addComponent(btnPrev)
                     .addComponent(btnNext)
-                    .addComponent(btnLast))
+                    .addComponent(btnLast)
+                    .addComponent(btnStudent))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -226,7 +446,7 @@ public class Course extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -265,6 +485,46 @@ public class Course extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
+        this.index = 0;
+        this.edit();
+    }//GEN-LAST:event_btnFirstActionPerformed
+
+    private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
+        this.index--;
+        this.edit();
+    }//GEN-LAST:event_btnPrevActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        this.index++;
+        this.edit();
+    }//GEN-LAST:event_btnNextActionPerformed
+
+    private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
+        this.index = tblCourse.getRowCount() - 1;
+        this.edit();
+    }//GEN-LAST:event_btnLastActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        insert();
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        delete();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        update();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clear();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentActionPerformed
+        openHocVien();
+    }//GEN-LAST:event_btnStudentActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -276,7 +536,7 @@ public class Course extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -309,10 +569,11 @@ public class Course extends javax.swing.JFrame {
     private javax.swing.JButton btnLast;
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrev;
+    private javax.swing.JButton btnStudent;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cboChuyenDe;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private com.toedter.calendar.JDateChooser dayNgayKG;
+    private com.toedter.calendar.JDateChooser dayNgayTao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -326,10 +587,10 @@ public class Course extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTable tblCourse;
+    private javax.swing.JTextArea txtGhiChu;
+    private javax.swing.JTextField txtHocPhi;
+    private javax.swing.JTextField txtMaNV;
+    private javax.swing.JTextField txtThoiLuong;
     // End of variables declaration//GEN-END:variables
 }
