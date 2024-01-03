@@ -40,6 +40,8 @@ public class LogIn extends javax.swing.JDialog {
                     ShareHelper.user = emp;
                     DialogHelper.alert(this, "Đăng nhập thành công!");
                     this.dispose();
+                    Main main = new Main();
+                    main.setVisible(true);
                 } else {
                     DialogHelper.alert(this, "Sai mật khẩu!");
                 }
@@ -87,7 +89,11 @@ public class LogIn extends javax.swing.JDialog {
 
         jLabel3.setText("Tên đăng nhập");
 
+        txtMaNV.setText("QuangVD");
+
         jLabel4.setText("Mật khẩu");
+
+        txtMatKhau.setText("123456");
 
         btnDangNhap.setText("Đăng nhập");
         btnDangNhap.addActionListener(new java.awt.event.ActionListener() {

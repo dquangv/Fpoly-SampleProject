@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package View;
 
@@ -18,16 +18,17 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Quang
  */
-public class Course extends javax.swing.JFrame {
+public class Course extends javax.swing.JDialog {
 
     int index = 0;
     CourseDAO dao = new CourseDAO();
     ThematicDAO cddao = new ThematicDAO();
 
     /**
-     * Creates new form Course
+     * Creates new form Course1
      */
-    public Course() {
+    public Course(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         init();
     }
@@ -115,7 +116,7 @@ public class Course extends javax.swing.JFrame {
     public void openHocVien() {
         Integer id = Integer.parseInt(cboChuyenDe.getToolTipText());
         
-        new Student().setVisible(true);
+//        new Student().setVisible(true);
     }
     
     public void fillComboBox() {
@@ -230,13 +231,7 @@ public class Course extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCourse = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("QUẢN LÝ KHOÁ HỌC");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
@@ -366,7 +361,7 @@ public class Course extends javax.swing.JFrame {
                         .addComponent(btnClear)
                         .addGap(18, 18, 18)
                         .addComponent(btnStudent)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -456,7 +451,7 @@ public class Course extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -476,7 +471,7 @@ public class Course extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabs)
+                    .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -494,6 +489,22 @@ public class Course extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        insert();
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        delete();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        update();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clear();
+    }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
         this.index = 0;
@@ -515,37 +526,14 @@ public class Course extends javax.swing.JFrame {
         this.edit();
     }//GEN-LAST:event_btnLastActionPerformed
 
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        insert();
-    }//GEN-LAST:event_btnInsertActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        delete();
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        update();
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clear();
-    }//GEN-LAST:event_btnClearActionPerformed
-
     private void btnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentActionPerformed
         openHocVien();
     }//GEN-LAST:event_btnStudentActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        this.fillComboBox();
-        this.load();
-        this.clear();
-        this.setStatus(true);
-    }//GEN-LAST:event_formWindowOpened
-
     private void tblCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCourseMouseClicked
         if (evt.getClickCount() == 2) {
             this.index = tblCourse.rowAtPoint(evt.getPoint());
-            
+
             if (this.index >= 0) {
                 this.edit();
                 tabs.setSelectedIndex(0);
@@ -564,7 +552,7 @@ public class Course extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -581,10 +569,17 @@ public class Course extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Course().setVisible(true);
+                Course dialog = new Course(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package View;
 
@@ -16,15 +16,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Quang
  */
-public class Thematic extends javax.swing.JFrame {
+public class Thematic extends javax.swing.JDialog {
 
     int index = 0;
     ThematicDAO dao = new ThematicDAO();
 
     /**
-     * Creates new form Thematic
+     * Creates new form Thematic1
      */
-    public Thematic() {
+    public Thematic(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         init();
     }
@@ -121,11 +122,11 @@ public class Thematic extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
-    
+
     public void delete() {
         if (DialogHelper.confirm(this, "Bạn có chắc muốn xoá chuyên đề này không?")) {
             String maCD = txtMaCD.getText();
-            
+
             try {
                 dao.delete(maCD);
                 this.load();
@@ -136,12 +137,12 @@ public class Thematic extends javax.swing.JFrame {
             }
         }
     }
-    
+
     public void edit() {
         try {
             String maCD = (String) tblThematic.getValueAt(this.index, 0);
             Model.Thematic model = dao.findById(maCD);
-            
+
             if (model != null) {
                 this.setModel(model);
                 this.setStatus(false);
@@ -150,13 +151,13 @@ public class Thematic extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
-    
+
     public void selectImage() {
         JFileChooser imageChooser = new JFileChooser();
-        
+
         if (imageChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = imageChooser.getSelectedFile();
-            
+
             if (ShareHelper.saveLogo(file)) {
                 lblHinh.setIcon(ShareHelper.readLogo(file.getName()));
                 lblHinh.setToolTipText(file.getName());
@@ -173,7 +174,6 @@ public class Thematic extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -200,13 +200,9 @@ public class Thematic extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblThematic = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("QUẢN LÝ CHUYÊN ĐỀ");
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel1.setText("QUẢN LÝ CHUYÊN ĐỀ");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel2.setText("Hình logo");
 
@@ -296,7 +292,7 @@ public class Thematic extends javax.swing.JFrame {
                         .addComponent(btnUpdate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnClear)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -373,7 +369,7 @@ public class Thematic extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -386,6 +382,10 @@ public class Thematic extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("DANH SÁCH", jPanel2);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel1.setText("QUẢN LÝ CHUYÊN ĐỀ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -393,7 +393,7 @@ public class Thematic extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -458,11 +458,19 @@ public class Thematic extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Thematic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Thematic().setVisible(true);
+                Thematic dialog = new Thematic(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

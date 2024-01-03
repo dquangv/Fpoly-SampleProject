@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package View;
 
@@ -15,17 +15,17 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Quang
  */
-public class Learner extends javax.swing.JFrame {
+public class Learner extends javax.swing.JDialog {
 
     int index = 0;
     LearnerDAO dao = new LearnerDAO();
 
     /**
-     * Creates new form Learner
+     * Creates new form Learner1
      */
-    public Learner() {
+    public Learner(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
         init();
     }
 
@@ -198,8 +198,7 @@ public class Learner extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblLearner = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("QUẢN LÝ NGƯỜI HỌC");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
@@ -524,7 +523,7 @@ public class Learner extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -539,11 +538,19 @@ public class Learner extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Learner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Learner().setVisible(true);
+                Learner dialog = new Learner(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

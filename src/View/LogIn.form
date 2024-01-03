@@ -92,6 +92,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtMaNV">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="QuangVD"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -99,6 +102,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtMatKhau">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="123456"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnDangNhap">
       <Properties>

@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package View;
 
@@ -9,25 +9,26 @@ import Controller.StudentDAO;
 import Helper.DialogHelper;
 import Helper.JdbcHelper;
 import Helper.ShareHelper;
+import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
 
 /**
  *
  * @author Quang
  */
-public class Student extends javax.swing.JFrame {
+public class Student extends javax.swing.JDialog {
 
     public Integer maKH;
     StudentDAO dao = new StudentDAO();
     LearnerDAO nhdao = new LearnerDAO();
 
     /**
-     * Creates new form Student
+     * Creates new form Student1
      */
-    public Student() {
+    public Student(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         init();
     }
@@ -102,7 +103,7 @@ public class Student extends javax.swing.JFrame {
             String maNH = (String) tblStudent.getValueAt(i, 1);
             Double diem = (Double) tblStudent.getValueAt(i, 3);
             Boolean isDelete = (Boolean) tblStudent.getValueAt(i, 4);
-            
+
             try {
                 if (isDelete) {
                     dao.delete(maHV);
@@ -135,13 +136,6 @@ public class Student extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        cboNguoiHoc = new javax.swing.JComboBox<>();
-        txtDiem = new javax.swing.JTextField();
-        btnInsert = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStudent = new javax.swing.JTable();
@@ -149,14 +143,79 @@ public class Student extends javax.swing.JFrame {
         rdoDaNhapDiem = new javax.swing.JRadioButton();
         rdoChuaNhapDiem = new javax.swing.JRadioButton();
         btnUpdate = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        cboNguoiHoc = new javax.swing.JComboBox<>();
+        txtDiem = new javax.swing.JTextField();
+        btnInsert = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("QUẢN LÝ HỌC VIÊN CỦA KHOÁ HỌC");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, null, null, null, new java.awt.Color(0, 0, 0)));
+
+        tblStudent.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "MÃ HV", "MÃ NH", "HỌ VÀ TÊN", "ĐIỂM", "XOÁ"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        jScrollPane1.setViewportView(tblStudent);
+
+        rdoTatCa.setText("Tất cả");
+
+        rdoDaNhapDiem.setText("Đã nhập điểm");
+
+        rdoChuaNhapDiem.setText("Chưa nhập điểm");
+
+        btnUpdate.setText("Cập nhật");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(rdoTatCa)
+                        .addGap(18, 18, 18)
+                        .addComponent(rdoDaNhapDiem)
+                        .addGap(18, 18, 18)
+                        .addComponent(rdoChuaNhapDiem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUpdate))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rdoTatCa)
+                    .addComponent(rdoDaNhapDiem)
+                    .addComponent(rdoChuaNhapDiem)
+                    .addComponent(btnUpdate))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -199,74 +258,6 @@ public class Student extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("HỌC VIÊN CỦA KHOÁ");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, null, null, null, new java.awt.Color(0, 0, 0)));
-
-        tblStudent.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "MÃ HV", "MÃ NH", "HỌ VÀ TÊN", "ĐIỂM", "XOÁ"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tblStudent);
-
-        buttonGroup1.add(rdoTatCa);
-        rdoTatCa.setText("Tất cả");
-
-        buttonGroup1.add(rdoDaNhapDiem);
-        rdoDaNhapDiem.setText("Đã nhập điểm");
-
-        buttonGroup1.add(rdoChuaNhapDiem);
-        rdoChuaNhapDiem.setText("Chưa nhập điểm");
-
-        btnUpdate.setText("Cập nhật");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(rdoTatCa)
-                        .addGap(18, 18, 18)
-                        .addComponent(rdoDaNhapDiem)
-                        .addGap(18, 18, 18)
-                        .addComponent(rdoChuaNhapDiem)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnUpdate))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rdoTatCa)
-                    .addComponent(rdoDaNhapDiem)
-                    .addComponent(rdoChuaNhapDiem)
-                    .addComponent(btnUpdate))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -300,18 +291,13 @@ public class Student extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        insert();
-    }//GEN-LAST:event_btnInsertActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        this.fillComboBox();
-        this.fillTable();
-    }//GEN-LAST:event_formWindowOpened
-
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         update();
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        insert();
+    }//GEN-LAST:event_btnInsertActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,11 +325,19 @@ public class Student extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Student.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Student().setVisible(true);
+                Student dialog = new Student(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -351,7 +345,6 @@ public class Student extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cboNguoiHoc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

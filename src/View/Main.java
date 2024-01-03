@@ -46,14 +46,14 @@ public class Main extends javax.swing.JFrame {
 
     public void openLogin() {
         LogIn login = new LogIn(this, true);
-        
+
         login.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         login.setVisible(true);
     }
 
     public void openWelcome() {
         Welcome welcome = new Welcome(this, true);
-        
+
         welcome.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         welcome.setVisible(true);
     }
@@ -61,10 +61,10 @@ public class Main extends javax.swing.JFrame {
     public void logOff() {
         ShareHelper.logoff();
         this.dispose();
-        
+
         LogIn login = new LogIn(this, true);
-        
-        login.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        login.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         login.setVisible(true);
     }
 
@@ -76,7 +76,7 @@ public class Main extends javax.swing.JFrame {
 
     public void openThongKe(int index) {
         if (ShareHelper.authenticated()) {
-            new Statistics().setVisible(true);
+            new Statistics(this, true).setVisible(true);
         } else {
             DialogHelper.alert(this, "Vui lòng đăng nhập!");
         }
@@ -84,7 +84,7 @@ public class Main extends javax.swing.JFrame {
 
     public void openNhanVien() {
         if (ShareHelper.authenticated()) {
-            new Employee().setVisible(true);
+            new Employee(this, true).setVisible(true);
         } else {
             DialogHelper.alert(this, "Vui lòng đăng nhập");
         }
@@ -92,7 +92,7 @@ public class Main extends javax.swing.JFrame {
 
     public void openKhoaHoc() {
         if (ShareHelper.authenticated()) {
-            new Course().setVisible(true);
+            new Course(this,true).setVisible(true);
         } else {
             DialogHelper.alert(this, "Vui lòng đăng nhập");
         }
@@ -100,7 +100,7 @@ public class Main extends javax.swing.JFrame {
 
     public void openChuyenDe() {
         if (ShareHelper.authenticated()) {
-            new Thematic().setVisible(true);
+            new Thematic(this, true).setVisible(true);
         } else {
             DialogHelper.alert(this, "Vui lòng đăng nhập");
         }
@@ -108,7 +108,7 @@ public class Main extends javax.swing.JFrame {
 
     public void openNguoiHoc() {
         if (ShareHelper.authenticated()) {
-            new Learner().setVisible(true);
+            new Learner(this, true).setVisible(true);
         } else {
             DialogHelper.alert(this, "Vui lòng đăng nhập");
         }
@@ -460,6 +460,11 @@ public class Main extends javax.swing.JFrame {
                 mniGioiThieuMouseClicked(evt);
             }
         });
+        mniGioiThieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniGioiThieuActionPerformed(evt);
+            }
+        });
         mnuTroGiup.add(mniGioiThieu);
 
         jMenuBar1.add(mnuTroGiup);
@@ -546,7 +551,6 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mniQLNhanVienMouseClicked
 
     private void mniGioiThieuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mniGioiThieuMouseClicked
-        openAbout();
     }//GEN-LAST:event_mniGioiThieuMouseClicked
 
     private void mniDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniDangXuatActionPerformed
@@ -556,6 +560,10 @@ public class Main extends javax.swing.JFrame {
     private void mniKetThucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniKetThucActionPerformed
         exit();
     }//GEN-LAST:event_mniKetThucActionPerformed
+
+    private void mniGioiThieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniGioiThieuActionPerformed
+        openAbout();
+    }//GEN-LAST:event_mniGioiThieuActionPerformed
 
     /**
      * @param args the command line arguments

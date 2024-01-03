@@ -1,33 +1,30 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package View;
 
 import Controller.EmployeeDAO;
 import Helper.DialogHelper;
 import Helper.ShareHelper;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Quang
  */
-public class Employee extends javax.swing.JFrame {
+public class Employee extends javax.swing.JDialog {
 
     int index = 0;
     EmployeeDAO dao = new EmployeeDAO();
 
     /**
-     * Creates new form EmployeeManagement
+     * Creates new form Employee1
      */
-    public Employee() {
+    public Employee(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
         init();
     }
 
@@ -108,10 +105,10 @@ public class Employee extends javax.swing.JFrame {
             }
         }
     }
-    
+
     public void update() {
         Model.Employee model = getModel();
-        
+
         String confirm = new String(txtXacNhanMatKhau.getPassword());
 
         if (!confirm.equals(model.getMatKhau())) {
@@ -126,11 +123,11 @@ public class Employee extends javax.swing.JFrame {
             }
         }
     }
-    
+
     public void delete() {
         if (DialogHelper.confirm(this, "Bạn có chắc muốn xoá nhân viên này không?")) {
             String maNV = txtMaNV.getText();
-            
+
             try {
                 dao.delete(maNV);
                 this.load();
@@ -141,12 +138,12 @@ public class Employee extends javax.swing.JFrame {
             }
         }
     }
-    
+
     public void edit() {
         try {
             String maNV = (String) tblEmp.getValueAt(this.index, 0);
             Model.Employee model = dao.findById(maNV);
-            
+
             if (model != null) {
                 this.setModel(model);
                 this.setStatus(false);
@@ -154,7 +151,9 @@ public class Employee extends javax.swing.JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    };
+    }
+
+    ;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -191,8 +190,7 @@ public class Employee extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEmp = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("QUẢN LÝ NHÂN VIÊN");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 51, 255));
@@ -394,7 +392,7 @@ public class Employee extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,7 +401,7 @@ public class Employee extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -430,15 +428,15 @@ public class Employee extends javax.swing.JFrame {
         this.edit();
     }//GEN-LAST:event_btnFirstActionPerformed
 
-    private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
-        this.index--;
-        this.edit();
-    }//GEN-LAST:event_btnPrevActionPerformed
-
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         this.index++;
         this.edit();
     }//GEN-LAST:event_btnNextActionPerformed
+
+    private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
+        this.index--;
+        this.edit();
+    }//GEN-LAST:event_btnPrevActionPerformed
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
         this.index = tblEmp.getRowCount() - 1;
@@ -456,7 +454,7 @@ public class Employee extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -473,10 +471,17 @@ public class Employee extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Employee().setVisible(true);
+                Employee dialog = new Employee(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

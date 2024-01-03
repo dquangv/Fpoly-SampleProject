@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="QU&#x1ea2;N L&#xdd; KHO&#xc1; H&#x1ecc;C"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
-  <Events>
-    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
-  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -30,8 +26,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tabs" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
+                  <Component id="tabs" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -80,10 +76,10 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -99,7 +95,7 @@
                                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="dayNgayTao" alignment="0" pref="334" max="32767" attributes="0"/>
-                                  <Component id="dayNgayKG" max="32767" attributes="0"/>
+                                  <Component id="dayNgayKG" alignment="1" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -112,7 +108,7 @@
                               <Component id="btnClear" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnStudent" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="72" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnFirst" min="-2" pref="50" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnPrev" min="-2" pref="50" max="-2" attributes="0"/>
@@ -121,11 +117,11 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnLast" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -141,8 +137,8 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="cboChuyenDe" min="-2" max="-2" attributes="0"/>
-                          <Component id="dayNgayKG" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboChuyenDe" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="dayNgayKG" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -161,8 +157,8 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="txtMaNV" min="-2" max="-2" attributes="0"/>
-                          <Component id="dayNgayTao" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtMaNV" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="dayNgayTao" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -361,7 +357,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="763" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="696" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -396,45 +392,6 @@
                         <Column editable="false" title="T&#x1ea0;O B&#x1ede;I" type="java.lang.Object"/>
                         <Column editable="false" title="NG&#xc0;Y T&#x1ea0;O" type="java.lang.Object"/>
                       </Table>
-                    </Property>
-                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="0">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                      </TableColumnModel>
                     </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
