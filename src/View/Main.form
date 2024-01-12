@@ -34,7 +34,7 @@
                   <KeyStroke key="Ctrl+L"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/blue_button.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Key.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;&#x103;ng nh&#x1ead;p"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -50,7 +50,7 @@
                   <KeyStroke key="Ctrl+O"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/red_button.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Log out.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;&#x103;ng xu&#x1ea5;t"/>
               </Properties>
@@ -64,7 +64,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniDoiMatKhau">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/tools.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Refresh.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;&#x1ed5;i m&#x1ead;t kh&#x1ea9;u"/>
               </Properties>
@@ -77,7 +77,7 @@
                   <KeyStroke key="F10"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/shut_down.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Stop.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="K&#x1ebf;t th&#xfa;c"/>
               </Properties>
@@ -103,7 +103,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniQLNguoiHoc">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/user.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Conference.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ng&#x1b0;&#x1edd;i h&#x1ecd;c"/>
               </Properties>
@@ -114,7 +114,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniQLChuyenDe">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/notebook_edit.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Lists.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Chuy&#xea;n &#x111;&#x1ec1;"/>
               </Properties>
@@ -125,7 +125,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniQLKhoaHoc">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/calendar.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Certificate.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Kho&#xe1; h&#x1ecd;c"/>
               </Properties>
@@ -136,7 +136,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniQLNhanVien">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/business_user.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/User group.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Nh&#xe2;n vi&#xea;n"/>
               </Properties>
@@ -161,7 +161,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniTKNguoiHoc">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/image.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Clien list.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ng&#x1b0;&#x1edd;i h&#x1ecd;c t&#x1eeb;ng n&#x103;m"/>
               </Properties>
@@ -171,7 +171,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniTKBangDiem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/window_edit.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Card file.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="B&#x1ea3;ng &#x111;i&#x1ec3;m kho&#xe1;..."/>
               </Properties>
@@ -179,7 +179,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniTKKhoaHoc">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/page_edit.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Bar chart.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;i&#x1ec3;m t&#x1eeb;ng kho&#xe1; h&#x1ecd;c"/>
               </Properties>
@@ -189,7 +189,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniTKDoanhThu">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/database.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Dollar.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Doanh thu t&#x1eeb;ng chuy&#xea;n &#x111;&#x1ec1;..."/>
               </Properties>
@@ -214,7 +214,7 @@
                   <KeyStroke key="F1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/globe.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Globe.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="H&#x1b0;&#x1edb;ng d&#x1eab;n s&#x1eed; d&#x1ee5;ng"/>
               </Properties>
@@ -224,7 +224,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mniGioiThieu">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icons/home.png"/>
+                  <Image iconType="3" name="/Icons/Hinh/Brick house.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Gi&#x1edb;i thi&#x1ec7;u s&#x1ea3;n ph&#x1ea9;m"/>
               </Properties>

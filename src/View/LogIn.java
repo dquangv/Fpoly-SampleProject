@@ -40,8 +40,6 @@ public class LogIn extends javax.swing.JDialog {
                     ShareHelper.user = emp;
                     DialogHelper.alert(this, "Đăng nhập thành công!");
                     this.dispose();
-                    Main main = new Main();
-                    main.setVisible(true);
                 } else {
                     DialogHelper.alert(this, "Sai mật khẩu!");
                 }

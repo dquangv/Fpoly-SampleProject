@@ -60,7 +60,7 @@ public class Main extends javax.swing.JFrame {
 
     public void logOff() {
         ShareHelper.logoff();
-        this.dispose();
+//        this.dispose();
 
         LogIn login = new LogIn(this, true);
 
@@ -321,7 +321,7 @@ public class Main extends javax.swing.JFrame {
         });
 
         mniDangNhap.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        mniDangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/blue_button.png"))); // NOI18N
+        mniDangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Key.png"))); // NOI18N
         mniDangNhap.setText("Đăng nhập");
         mniDangNhap.setToolTipText("");
         mniDangNhap.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -337,7 +337,7 @@ public class Main extends javax.swing.JFrame {
         mnuHeThong.add(mniDangNhap);
 
         mniDangXuat.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        mniDangXuat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/red_button.png"))); // NOI18N
+        mniDangXuat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Log out.png"))); // NOI18N
         mniDangXuat.setText("Đăng xuất");
         mniDangXuat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -352,13 +352,13 @@ public class Main extends javax.swing.JFrame {
         mnuHeThong.add(mniDangXuat);
         mnuHeThong.add(sep1);
 
-        mniDoiMatKhau.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/tools.png"))); // NOI18N
+        mniDoiMatKhau.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Refresh.png"))); // NOI18N
         mniDoiMatKhau.setText("Đổi mật khẩu");
         mnuHeThong.add(mniDoiMatKhau);
         mnuHeThong.add(jSeparator4);
 
         mniKetThuc.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
-        mniKetThuc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/shut_down.png"))); // NOI18N
+        mniKetThuc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Stop.png"))); // NOI18N
         mniKetThuc.setText("Kết thúc");
         mniKetThuc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -379,7 +379,7 @@ public class Main extends javax.swing.JFrame {
         mnuQuanLy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mnuQuanLy.setMaximumSize(new java.awt.Dimension(60, 20));
 
-        mniQLNguoiHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/user.png"))); // NOI18N
+        mniQLNguoiHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Conference.png"))); // NOI18N
         mniQLNguoiHoc.setText("Người học");
         mniQLNguoiHoc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -388,7 +388,7 @@ public class Main extends javax.swing.JFrame {
         });
         mnuQuanLy.add(mniQLNguoiHoc);
 
-        mniQLChuyenDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/notebook_edit.png"))); // NOI18N
+        mniQLChuyenDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Lists.png"))); // NOI18N
         mniQLChuyenDe.setText("Chuyên đề");
         mniQLChuyenDe.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -397,7 +397,7 @@ public class Main extends javax.swing.JFrame {
         });
         mnuQuanLy.add(mniQLChuyenDe);
 
-        mniQLKhoaHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/calendar.png"))); // NOI18N
+        mniQLKhoaHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Certificate.png"))); // NOI18N
         mniQLKhoaHoc.setText("Khoá học");
         mniQLKhoaHoc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -406,7 +406,7 @@ public class Main extends javax.swing.JFrame {
         });
         mnuQuanLy.add(mniQLKhoaHoc);
 
-        mniQLNhanVien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/business_user.png"))); // NOI18N
+        mniQLNhanVien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/User group.png"))); // NOI18N
         mniQLNhanVien.setText("Nhân viên");
         mniQLNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -422,21 +422,21 @@ public class Main extends javax.swing.JFrame {
         mnuThongKe.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mnuThongKe.setMaximumSize(new java.awt.Dimension(60, 20));
 
-        mniTKNguoiHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/image.png"))); // NOI18N
+        mniTKNguoiHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Clien list.png"))); // NOI18N
         mniTKNguoiHoc.setText("Người học từng năm");
         mnuThongKe.add(mniTKNguoiHoc);
         mnuThongKe.add(jSeparator5);
 
-        mniTKBangDiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/window_edit.png"))); // NOI18N
+        mniTKBangDiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Card file.png"))); // NOI18N
         mniTKBangDiem.setText("Bảng điểm khoá...");
         mnuThongKe.add(mniTKBangDiem);
 
-        mniTKKhoaHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/page_edit.png"))); // NOI18N
+        mniTKKhoaHoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Bar chart.png"))); // NOI18N
         mniTKKhoaHoc.setText("Điểm từng khoá học");
         mnuThongKe.add(mniTKKhoaHoc);
         mnuThongKe.add(jSeparator6);
 
-        mniTKDoanhThu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/database.png"))); // NOI18N
+        mniTKDoanhThu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Dollar.png"))); // NOI18N
         mniTKDoanhThu.setText("Doanh thu từng chuyên đề...");
         mnuThongKe.add(mniTKDoanhThu);
 
@@ -448,12 +448,12 @@ public class Main extends javax.swing.JFrame {
         mnuTroGiup.setMaximumSize(new java.awt.Dimension(60, 20));
 
         mniHuongDan.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        mniHuongDan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/globe.png"))); // NOI18N
+        mniHuongDan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Globe.png"))); // NOI18N
         mniHuongDan.setText("Hướng dẫn sử dụng");
         mnuTroGiup.add(mniHuongDan);
         mnuTroGiup.add(jSeparator7);
 
-        mniGioiThieu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/home.png"))); // NOI18N
+        mniGioiThieu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Hinh/Brick house.png"))); // NOI18N
         mniGioiThieu.setText("Giới thiệu sản phẩm");
         mniGioiThieu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

@@ -33,6 +33,7 @@ public class Thematic extends javax.swing.JDialog {
     public void init() {
         setIconImage(ShareHelper.appIcon());
         setLocationRelativeTo(null);
+        load();
     }
 
     public void load() {
@@ -203,8 +204,17 @@ public class Thematic extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("QUẢN LÝ CHUYÊN ĐỀ");
 
         jLabel2.setText("Hình logo");
+
+        lblHinh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHinh.setText("Ảnh");
+        lblHinh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHinhMouseClicked(evt);
+            }
+        });
 
         jLabel4.setText("Mã chuyên đề");
 
@@ -393,7 +403,7 @@ public class Thematic extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -432,6 +442,10 @@ public class Thematic extends javax.swing.JDialog {
         this.edit();
     }//GEN-LAST:event_btnLastActionPerformed
 
+    private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
+        selectImage();
+    }//GEN-LAST:event_lblHinhMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -443,7 +457,7 @@ public class Thematic extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

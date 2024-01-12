@@ -62,29 +62,29 @@ alter table nguoihoc
 add
 	constraint fk_nh_nv
 	foreign key (manhanvien)
-	references nhanvien (manhanvien);
+	references nhanvien (manhanvien) on update cascade on delete no action;
 go
 
 alter table khoahoc
 add 
 	constraint fk_kh_cd
 	foreign key (machuyende)
-	references chuyende (machuyende) on update cascade,
+	references chuyende (machuyende) on update cascade on delete no action,
 	
 	constraint fk_kh_nv
 	foreign key (manhanvien)
-	references nhanvien (manhanvien) on update cascade;
+	references nhanvien (manhanvien) on update cascade on delete no action;
 go
 
 alter table hocvien
 add
 	constraint fk_hv_kh
 	foreign key (makhoahoc)
-	references khoahoc (makhoahoc) on delete cascade,
+	references khoahoc (makhoahoc) on delete cascade on update cascade,
 	
 	constraint fk_hv_nh
 	foreign key (manguoihoc)
-	references nguoihoc (manguoihoc) on update cascade;
+	references nguoihoc (manguoihoc) on update cascade on delete no action;
 go
 
 create proc sp_ThongKeNguoiHoc
