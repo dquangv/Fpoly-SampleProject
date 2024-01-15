@@ -31,6 +31,7 @@ public class Learner extends javax.swing.JDialog {
 
     public void init() {
         setIconImage(ShareHelper.appIcon());
+        setLocationRelativeTo(null);
     }
 
     public void load() {
@@ -55,7 +56,7 @@ public class Learner extends javax.swing.JDialog {
     public void setModel(Model.Learner model) {
         txtMaNH.setText(model.getMaNH());
         txtHoTen.setText(model.getHoTen());
-        cbbGioiTinh.setSelectedIndex(model.getGioiTinh());
+//        cbbGioiTinh.setSelectedIndex(model.getGioiTinh());
         dayNgaySinh.setDate(model.getNgaySinh());
         txtDienThoai.setText(model.getDienThoai());
         txtEmail.setText(model.getEmail());
@@ -67,7 +68,7 @@ public class Learner extends javax.swing.JDialog {
 
         model.setMaNH(txtMaNH.getText());
         model.setHoTen(txtHoTen.getText());
-        model.setGioiTinh(cbbGioiTinh.getSelectedIndex() == 0);
+//        model.setGioiTinh(cbbGioiTinh.getSelectedIndex() == 0);
         model.setNgaySinh(dayNgaySinh.getDate());
         model.setDienThoai(txtDienThoai.getText());
         model.setEmail(txtEmail.getText());
@@ -164,6 +165,7 @@ public class Learner extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -172,7 +174,6 @@ public class Learner extends javax.swing.JDialog {
         txtHoTen = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        cbbGioiTinh = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         dayNgaySinh = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
@@ -190,6 +191,8 @@ public class Learner extends javax.swing.JDialog {
         btnPrev = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         btnLast = new javax.swing.JButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -199,6 +202,11 @@ public class Learner extends javax.swing.JDialog {
         tblLearner = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
@@ -209,8 +217,6 @@ public class Learner extends javax.swing.JDialog {
         jLabel3.setText("Họ và tên");
 
         jLabel4.setText("Giới tính");
-
-        cbbGioiTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
 
         jLabel5.setText("Ngày sinh");
 
@@ -280,31 +286,19 @@ public class Learner extends javax.swing.JDialog {
             }
         });
 
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("Nam");
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("Nữ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel8)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6)
-                                    .addComponent(txtDienThoai)
-                                    .addComponent(cbbGioiTinh, 0, 338, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel5)
-                                    .addComponent(txtEmail)
-                                    .addComponent(dayNgaySinh, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnInsert)
                         .addGap(18, 18, 18)
                         .addComponent(btnDelete)
@@ -321,9 +315,30 @@ public class Learner extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(btnLast, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1)
-                    .addComponent(txtHoTen, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtMaNH, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtHoTen)
+                            .addComponent(txtMaNH)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel6)
+                                    .addComponent(txtDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jRadioButton1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jRadioButton2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel5)
+                                    .addComponent(txtEmail)
+                                    .addComponent(dayNgaySinh, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -341,8 +356,10 @@ public class Learner extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbbGioiTinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRadioButton1)
+                            .addComponent(jRadioButton2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -512,6 +529,10 @@ public class Learner extends javax.swing.JDialog {
         this.edit();
     }//GEN-LAST:event_btnLastActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        load();
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -523,7 +544,7 @@ public class Learner extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -565,7 +586,7 @@ public class Learner extends javax.swing.JDialog {
     private javax.swing.JButton btnPrev;
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JComboBox<String> cbbGioiTinh;
+    private javax.swing.ButtonGroup buttonGroup1;
     private com.toedter.calendar.JDateChooser dayNgaySinh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -579,6 +600,8 @@ public class Learner extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
