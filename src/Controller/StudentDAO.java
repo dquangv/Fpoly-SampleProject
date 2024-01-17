@@ -77,4 +77,10 @@ public class StudentDAO {
         
         return list.size() > 0 ? list.get(0) : null;
     }
+    
+    public List<Student> findByKhoaHoc(int maKH) {
+        String sql = "select * from hocvien where makhoahoc = ?;";
+        
+        return this.select(sql, maKH);
+    }
 }

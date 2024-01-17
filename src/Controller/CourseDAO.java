@@ -17,7 +17,7 @@ import java.util.List;
 public class CourseDAO {
 
     public void insert(Course model) throws SQLException {
-        String sql = "insert into khoahoc values (?, ?, ?, ?, ?, ?);";
+        String sql = "insert into khoahoc values (machuyende, hocphi, thoiluong, ngaykhaigiang, ghichu, manhanvien) (?, ?, ?, ?, ?, ?);";
         JdbcHelper.executeUpdate(sql, model.getMaCD(), model.getHocPhi(), model.getThoiLuong(), model.getNgayKG(), model.getGhiChu(), model.getMaNV());
     }
 
@@ -80,5 +80,30 @@ public class CourseDAO {
         List<Course> list = select(sql, maKH);
         
         return list.size() > 0 ? list.get(0) : null;
+    }
+    
+    public List<Model.Course> findByChuyenDe(String maCD) {
+        String sql = "select * from khoahoc where machuyende = ?;";
+        
+        return this.select(sql, maCD);
+    }
+    
+    public List<Integer> findByYear() {
+        String sql = "select dinstinct year(ngaykhaigiang) year from khoahoc order by year desc;";
+        List<Integer> list = new ArrayList<>();
+        
+        try {
+            ResultSet rs = JdbcHelper.executeQuery(sql);
+            
+            while (rs.next()) {
+                list.add(rs.getInt(1));
+            }
+            
+            rs.getStatement().getConnection().close();
+            
+            return list;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

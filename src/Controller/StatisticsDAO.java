@@ -126,4 +126,8 @@ public class StatisticsDAO {
 
         return list;
     }
-}
+    
+//    public List<Object[]> getDoanhThuBD(int nam) {
+//        String sql = "{call "
+//    }
+ }

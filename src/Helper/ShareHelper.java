@@ -59,4 +59,8 @@ public class ShareHelper {
     public static boolean authenticated() {
         return ShareHelper.user != null;
     }
+    
+    public static boolean isManager() {
+        return ShareHelper.authenticated() && !user.isVaiTro();
+    }
 }

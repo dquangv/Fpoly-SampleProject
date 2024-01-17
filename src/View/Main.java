@@ -75,18 +75,18 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void openThongKe(int index) {
-        if (ShareHelper.authenticated()) {
+        if (!ShareHelper.isManager()) {
             new Statistics(this, true).setVisible(true);
         } else {
-            DialogHelper.alert(this, "Vui lòng đăng nhập!");
+            DialogHelper.alert(this, "Bạn không đủ quyền hạn sử dụng chức năng này");
         }
     }
 
     public void openNhanVien() {
-        if (ShareHelper.authenticated()) {
+        if (ShareHelper.isManager()) {
             new Employee(this, true).setVisible(true);
         } else {
-            DialogHelper.alert(this, "Vui lòng đăng nhập");
+            DialogHelper.alert(this, "Bạn không đủ quyền hạn sử dụng chức năng này");
         }
     }
 
@@ -413,6 +413,11 @@ public class Main extends javax.swing.JFrame {
                 mniQLNhanVienMouseClicked(evt);
             }
         });
+        mniQLNhanVien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniQLNhanVienActionPerformed(evt);
+            }
+        });
         mnuQuanLy.add(mniQLNhanVien);
 
         jMenuBar1.add(mnuQuanLy);
@@ -547,7 +552,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mniQLKhoaHocMouseClicked
 
     private void mniQLNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mniQLNhanVienMouseClicked
-        openNhanVien();
+//        openNhanVien();
     }//GEN-LAST:event_mniQLNhanVienMouseClicked
 
     private void mniGioiThieuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mniGioiThieuMouseClicked
@@ -564,6 +569,10 @@ public class Main extends javax.swing.JFrame {
     private void mniGioiThieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniGioiThieuActionPerformed
         openAbout();
     }//GEN-LAST:event_mniGioiThieuActionPerformed
+
+    private void mniQLNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniQLNhanVienActionPerformed
+        openNhanVien();
+    }//GEN-LAST:event_mniQLNhanVienActionPerformed
 
     /**
      * @param args the command line arguments

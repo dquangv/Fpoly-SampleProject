@@ -76,4 +76,22 @@ public class EmployeeDAO {
         
         return list.size() > 0 ? list.get(0) : null;
     }
+    
+    public String selectPasswordByEmail(String email) {
+        String sql = "select matkhau from nhanvien where email = ?;";
+        
+        try {
+            ResultSet rs = JdbcHelper.executeQuery(sql, email);
+            
+            if (rs.next()) {
+                return rs.getString("matkhau");
+            }
+            
+            rs.getStatement().getConnection().close();
+            
+            return "Email này đã không được đăng ký trong hệ thống";
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

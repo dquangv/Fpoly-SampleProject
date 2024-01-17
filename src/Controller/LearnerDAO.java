@@ -14,6 +14,7 @@ import java.util.List;
  * @author Quang
  */
 public class LearnerDAO {
+    
     public void insert(Learner model) throws SQLException {
         String sql = "insert into nguoihoc values (?, ?, ?, ?, ?, ?, ?, ?);";
         JdbcHelper.executeUpdate(sql, model.getMaNH(), model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV());
@@ -75,15 +76,15 @@ public class LearnerDAO {
     }
     
     public List<Learner> selectByKeyword(String keyword) {
-        String sql = "select * from nguoihoc where hovaten like ?;";
+        String sql = "select * from nguoihoc where hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ?;";
         
         return select(sql, "%" + keyword + "%");
     }
     
-    public List<Learner> selectByCourse(Integer maKH) {
-        String sql = "select * from nguoihoc where manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?)";
+    public List<Learner> selectByCourse(Integer maKH, String keyword) {
+        String sql = "select * from nguoihoc where hovaten like ? and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?)";
         
-        return select(sql, maKH);
+        return select(sql, "%" + keyword + "%", maKH);
     }
     
     public Learner findById(String maNH) {

@@ -30,31 +30,53 @@ public class Course extends javax.swing.JDialog {
     public Course(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        init();
-    }
-    
-    public void init() {
-        setIconImage(ShareHelper.appIcon());
         setLocationRelativeTo(null);
+        setIconImage(ShareHelper.appIcon());
     }
-    
+
+    public void init() {
+        fillComboBox();
+        load();
+        tabs.setSelectedIndex(1);
+        decentralization();
+    }
+
+    public void decentralization() {
+        if (ShareHelper.user.getVaiTro() == 0) {
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            txtChuyenDe.setEditable(false);
+            txtHocPhi.setEditable(false);
+            txtThoiLuong.setEditable(false);
+        }
+    }
+
     public void load() {
         DefaultTableModel model = (DefaultTableModel) tblCourse.getModel();
-        
+
         model.setRowCount(0);
-        
+
         try {
-            List<Model.Course> list = dao.select();
-            
-            for (Model.Course kh : list) {
-                Object[] row = {kh.getMaKH(), kh.getMaCD(), kh.getThoiLuong(), kh.getHocPhi(), DateHelper.toString(kh.getNgayKG()), kh.getMaNV(), DateHelper.toString(kh.getNgayTao())};
-                model.addRow(row);
+
+            Model.Thematic cd = (Model.Thematic) cboChuyenDe.getSelectedItem();
+
+            System.out.println(cd);
+            System.out.println(cd.getMaCD());
+            System.out.println(cboChuyenDe.getToolTipText());
+            if (cd != null) {
+                List<Model.Course> list = dao.findByChuyenDe(cd.getMaCD());
+
+                for (Model.Course kh : list) {
+                    Object[] row = {kh.getMaKH(), kh.getMaCD(), kh.getThoiLuong(), kh.getHocPhi(), DateHelper.toString(kh.getNgayKG()), kh.getMaNV(), DateHelper.toString(kh.getNgayTao())};
+                    model.addRow(row);
+                }
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
+
     public void setModel(Model.Course model) {
         cboChuyenDe.setToolTipText(String.valueOf(model.getMaKH()));
         cboChuyenDe.setSelectedItem(cddao.findById(model.getMaCD()));
@@ -65,83 +87,89 @@ public class Course extends javax.swing.JDialog {
         txtGhiChu.setText(model.getGhiChu());
         dayNgayTao.setDate(model.getNgayTao());
     }
-    
+
     public Model.Course getModel() {
         Model.Course model = new Model.Course();
         Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
-        
+
+        if (txtMaNV.getText().equals("")) {
+            model.setMaNV(ShareHelper.user.getMaNV());
+        } else {
+            model.setMaNV(txtMaNV.getText());
+        }
+
         model.setMaCD(thematic.getMaCD());
         model.setNgayKG(dayNgayKG.getDate());
         model.setHocPhi(Double.parseDouble(txtHocPhi.getText()));
         model.setThoiLuong(Integer.parseInt(txtThoiLuong.getText()));
         model.setGhiChu(txtGhiChu.getText());
-        model.setMaNV(ShareHelper.user.getMaNV());
         model.setNgayTao(dayNgayTao.getDate());
-        model.setMaKH(Integer.parseInt(cboChuyenDe.getToolTipText()));
-        
+//        model.setMaKH(Integer.parseInt(cboChuyenDe.getToolTipText()));
+
         return model;
     }
-    
+
     public void setStatus(boolean check) {
         btnInsert.setEnabled(check);
         btnUpdate.setEnabled(!check);
         btnDelete.setEnabled(!check);
-        
+
         boolean first = this.index > 0;
         boolean last = this.index < tblCourse.getRowCount() - 1;
-        
+
         btnFirst.setEnabled(!check && first);
         btnPrev.setEnabled(!check && first);
         btnNext.setEnabled(!check && last);
         btnLast.setEnabled(!check && last);
-        
-        btnStudent.setVisible(!check);
     }
-    
+
     public void clear() {
-        Model.Course model = new Model.Course();
-        Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
-        
-        model.setMaCD(thematic.getMaCD());
-        model.setMaNV(ShareHelper.user.getMaNV());
-        model.setNgayKG(DateHelper.add(30));
-        model.setNgayTao(DateHelper.now());
+        dayNgayTao.setDate(new Date());
+        dayNgayKG.setDate(null);
+        index = -1;
+        txtMaNV.setText(ShareHelper.user.getMaNV());
+        setStatus(true);
     }
-    
+
     public void selectComboBox() {
         Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
-        txtThoiLuong.setText(String.valueOf(thematic.getThoiLuong()));
-        txtHocPhi.setText(String.valueOf(thematic.getHocPhi()));
-    }
-    
-    public void openHocVien() {
-        Integer id = Integer.parseInt(cboChuyenDe.getToolTipText());
+
+        if (thematic != null) {
+            txtThoiLuong.setText(String.valueOf(thematic.getThoiLuong()));
+            txtHocPhi.setText(String.valueOf(thematic.getHocPhi()));
+            txtGhiChu.setText(thematic.getMoTa());
+            txtChuyenDe.setText(thematic.getTenCD());
+
+            load();
+            index = 0;
+            setStatus(false);
+        }
         
-//        new Student().setVisible(true);
+        decentralization();
     }
-    
+
     public void fillComboBox() {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboChuyenDe.getModel();
-        
+
         model.removeAllElements();
-        
+
         try {
             List<Model.Thematic> list = cddao.select();
-            
+
             for (Model.Thematic cd : list) {
                 model.addElement(cd);
             }
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
+
     public void insert() {
         Model.Course model = getModel();
-        
+
         model.setNgayTao(new Date());
-        
+
         try {
             dao.insert(model);
             this.load();
@@ -151,10 +179,10 @@ public class Course extends javax.swing.JDialog {
             ex.printStackTrace();
         }
     }
-    
+
     public void update() {
         Model.Course model = getModel();
-        
+
         try {
             dao.update(model);
             this.load();
@@ -163,32 +191,37 @@ public class Course extends javax.swing.JDialog {
             ex.printStackTrace();
         }
     }
-    
+
     public void delete() {
-        if (DialogHelper.confirm(this, "Bạn có chắc muốn xoá khoá học này không?")) {
-            int maKH = Integer.parseInt(cboChuyenDe.getToolTipText());
-            
-            try {
-                dao.delete(maKH);
-                this.load();
-                this.clear();
-                DialogHelper.alert(this, "Xoá thành công!");
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        if (!ShareHelper.isManager()) {
+            DialogHelper.alert(this, "Bạn không được phép sử dụng chức năng này!");
+        } else {
+            if (DialogHelper.confirm(this, "Bạn có chắc muốn xoá khoá học này không?")) {
+                int maKH = Integer.parseInt(cboChuyenDe.getToolTipText());
+
+                try {
+                    dao.delete(maKH);
+                    this.load();
+                    this.clear();
+                    DialogHelper.alert(this, "Xoá thành công!");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
-    
+
     public void edit() {
         try {
             Integer maKH = (Integer) tblCourse.getValueAt(this.index, 0);
             Model.Course model = dao.findById(maKH);
-            
+
             if (model != null) {
                 this.setModel(model);
+                tabs.setSelectedIndex(0);
                 this.setStatus(false);
             }
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -228,7 +261,6 @@ public class Course extends javax.swing.JDialog {
         btnPrev = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         btnLast = new javax.swing.JButton();
-        btnStudent = new javax.swing.JButton();
         txtChuyenDe = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -258,7 +290,11 @@ public class Course extends javax.swing.JDialog {
 
         jLabel6.setText("Người tạo");
 
+        txtMaNV.setEditable(false);
+
         jLabel7.setText("Ngày tạo");
+
+        dayNgayTao.setEnabled(false);
 
         jLabel8.setText("Ghi chú");
 
@@ -322,13 +358,6 @@ public class Course extends javax.swing.JDialog {
             }
         });
 
-        btnStudent.setText("Học viên");
-        btnStudent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStudentActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -360,9 +389,7 @@ public class Course extends javax.swing.JDialog {
                         .addComponent(btnUpdate)
                         .addGap(18, 18, 18)
                         .addComponent(btnClear)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnStudent)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                         .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -416,8 +443,7 @@ public class Course extends javax.swing.JDialog {
                     .addComponent(btnFirst)
                     .addComponent(btnPrev)
                     .addComponent(btnNext)
-                    .addComponent(btnLast)
-                    .addComponent(btnStudent))
+                    .addComponent(btnLast))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -468,6 +494,11 @@ public class Course extends javax.swing.JDialog {
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         cboChuyenDe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboChuyenDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboChuyenDeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -550,10 +581,6 @@ public class Course extends javax.swing.JDialog {
         this.edit();
     }//GEN-LAST:event_btnLastActionPerformed
 
-    private void btnStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentActionPerformed
-        openHocVien();
-    }//GEN-LAST:event_btnStudentActionPerformed
-
     private void tblCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCourseMouseClicked
         if (evt.getClickCount() == 2) {
             this.index = tblCourse.rowAtPoint(evt.getPoint());
@@ -562,15 +589,18 @@ public class Course extends javax.swing.JDialog {
                 this.edit();
                 tabs.setSelectedIndex(0);
             }
+            
+            decentralization();
         }
     }//GEN-LAST:event_tblCourseMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        fillComboBox();
-        load();
-//        this.clear();
-        this.setStatus(true);
+        init();
     }//GEN-LAST:event_formWindowOpened
+
+    private void cboChuyenDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChuyenDeActionPerformed
+        selectComboBox();
+    }//GEN-LAST:event_cboChuyenDeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -623,7 +653,6 @@ public class Course extends javax.swing.JDialog {
     private javax.swing.JButton btnLast;
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrev;
-    private javax.swing.JButton btnStudent;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cboChuyenDe;
     private com.toedter.calendar.JDateChooser dayNgayKG;

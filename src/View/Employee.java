@@ -41,7 +41,7 @@ public class Employee extends javax.swing.JDialog {
         List<Model.Employee> list = dao.select();
 
         for (Model.Employee emp : list) {
-            Object[] row = {emp.getMaNV(), emp.getMatKhau(), emp.getHoTen(), emp.isVaiTro() ? "Trưởng phòng" : "Nhân viên"};
+            Object[] row = {emp.getMaNV(), emp.getMatKhau(), emp.getHoTen(), emp.isVaiTro() ? "Nhân viên" : "Trưởng phòng"};
             model.addRow(row);
         }
     }
@@ -84,9 +84,11 @@ public class Employee extends javax.swing.JDialog {
         txtXacNhanMatKhau.setText(model.getMatKhau());
 
         if (model.isVaiTro()) {
-            rdoTruongPhong.setSelected(true);
-        } else {
+            rdoTruongPhong.setSelected(false);
             rdoNhanVien.setSelected(true);
+        } else {
+            rdoNhanVien.setSelected(false);
+            rdoTruongPhong.setSelected(true);
         }
     }
 
@@ -166,7 +168,7 @@ public class Employee extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabs = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtMaNV = new javax.swing.JTextField();
@@ -214,6 +216,7 @@ public class Employee extends javax.swing.JDialog {
 
         rdoTruongPhong.setText("Trưởng phòng");
 
+        rdoNhanVien.setSelected(true);
         rdoNhanVien.setText("Nhân viên");
 
         btnInsert.setText("Thêm");
@@ -350,7 +353,7 @@ public class Employee extends javax.swing.JDialog {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("CẬP NHẬT", jPanel1);
+        tabs.addTab("CẬP NHẬT", jPanel1);
 
         tblEmp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -366,6 +369,11 @@ public class Employee extends javax.swing.JDialog {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblEmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEmpMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblEmp);
@@ -387,7 +395,7 @@ public class Employee extends javax.swing.JDialog {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("DANH SÁCH", jPanel2);
+        tabs.addTab("DANH SÁCH", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -395,17 +403,20 @@ public class Employee extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)))
+                .addComponent(jLabel1)
+                .addGap(438, 438, 438))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -451,6 +462,17 @@ public class Employee extends javax.swing.JDialog {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         load();
     }//GEN-LAST:event_formWindowOpened
+
+    private void tblEmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpMouseClicked
+        if (evt.getClickCount() == 2) {
+            index = tblEmp.rowAtPoint(evt.getPoint());
+
+            if (index >= 0) {
+                this.edit();
+                tabs.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_tblEmpMouseClicked
 
     /**
      * @param args the command line arguments
@@ -513,9 +535,9 @@ public class Employee extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JRadioButton rdoNhanVien;
     private javax.swing.JRadioButton rdoTruongPhong;
+    private javax.swing.JTabbedPane tabs;
     private javax.swing.JTable tblEmp;
     private javax.swing.JTextField txtHoTen;
     private javax.swing.JTextField txtMaNV;

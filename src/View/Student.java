@@ -4,8 +4,10 @@
  */
 package View;
 
+import Controller.CourseDAO;
 import Controller.LearnerDAO;
 import Controller.StudentDAO;
+import Controller.ThematicDAO;
 import Helper.DialogHelper;
 import Helper.JdbcHelper;
 import Helper.ShareHelper;
@@ -21,8 +23,10 @@ import javax.swing.table.DefaultTableModel;
 public class Student extends javax.swing.JDialog {
 
     public Integer maKH;
+    ThematicDAO cddao = new ThematicDAO();
     StudentDAO dao = new StudentDAO();
     LearnerDAO nhdao = new LearnerDAO();
+    CourseDAO khdao = new CourseDAO();
 
     /**
      * Creates new form Student1
@@ -38,23 +42,41 @@ public class Student extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    public void fillComboBox() {
-        DefaultComboBoxModel model = (DefaultComboBoxModel) cboNguoiHoc.getModel();
+    public void fillComboBoxChuyenDe() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboThematic.getModel();
 
         model.removeAllElements();
 
         try {
-            List<Model.Learner> list = nhdao.selectByCourse(maKH);
+            List<Model.Thematic> list = cddao.select();
 
-            for (Model.Learner nh : list) {
-                model.addElement(nh);
+            for (Model.Thematic cd : list) {
+                model.addElement(cd);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+    
+    public void fillComboBoxKhoaHoc() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboCourse.getModel();
+        
+        model.removeAllElements();
+        
+        Model.Thematic cd = (Model.Thematic) cboThematic.getSelectedItem();
+        
+        if (cd != null) {
+            List<Model.Course> list = khdao.findByChuyenDe(cd.getMaCD());
+            
+            for (Model.Course kh : list) {
+                model.addElement(kh);
+            }
+            
+            this.fillTableHocVien();
+        }
+    }
 
-    public void fillTable() {
+    public void fillTableHocVien() {
 //        DefaultTableModel model = (DefaultTableModel) tblStudent.getModel();
 //
 //        model.setRowCount(0);
@@ -80,22 +102,22 @@ public class Student extends javax.swing.JDialog {
 //        }
     }
 
-    public void insert() {
-        Model.Learner learner = (Model.Learner) cboNguoiHoc.getSelectedItem();
-        Model.Student model = new Model.Student();
-
-        model.setMaKH(maKH);
-        model.setMaNH(learner.getMaNH());
-//        model.setDiem(Double.parseDouble(txtDiem.getText()));
-
-        try {
-            dao.insert(model);
-            this.fillComboBox();
-            this.fillTable();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void insert() {
+//        Model.Learner learner = (Model.Learner) cboThematic.getSelectedItem();
+//        Model.Student model = new Model.Student();
+//
+//        model.setMaKH(maKH);
+//        model.setMaNH(learner.getMaNH());
+////        model.setDiem(Double.parseDouble(txtDiem.getText()));
+//
+//        try {
+//            dao.insert(model);
+//            this.fillComboBox();
+//            this.fillTable();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void update() {
 //        for (int i = 0; i < tblStudent.getRowCount() - 1; i++) {
@@ -138,23 +160,23 @@ public class Student extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        cboNguoiHoc = new javax.swing.JComboBox<>();
+        cboThematic = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboCourse = new javax.swing.JComboBox<>();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        tblStudent = new javax.swing.JTable();
+        btnUpdate = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tblLearner = new javax.swing.JTable();
+        btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -170,14 +192,14 @@ public class Student extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cboNguoiHoc, 0, 354, Short.MAX_VALUE)
+                .addComponent(cboThematic, 0, 354, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(cboNguoiHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cboThematic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
@@ -193,18 +215,18 @@ public class Student extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jComboBox1, 0, 354, Short.MAX_VALUE)
+                .addComponent(cboCourse, 0, 354, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cboCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -220,11 +242,11 @@ public class Student extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblStudent);
 
-        jButton2.setText("Cập nhật điểm");
+        btnUpdate.setText("Cập nhật điểm");
 
-        jButton3.setText("Xoá khỏi khoá học");
+        btnRemove.setText("Xoá khỏi khoá học");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -236,9 +258,9 @@ public class Student extends javax.swing.JDialog {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(btnRemove)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)))
+                        .addComponent(btnUpdate)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -248,8 +270,8 @@ public class Student extends javax.swing.JDialog {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnUpdate)
+                    .addComponent(btnRemove))
                 .addContainerGap())
         );
 
@@ -267,18 +289,18 @@ public class Student extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1)
+                .addComponent(txtSearch)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblLearner.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -294,9 +316,9 @@ public class Student extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable2);
+        jScrollPane1.setViewportView(tblLearner);
 
-        jButton1.setText("Thêm vào khoá học");
+        btnAdd.setText("Thêm vào khoá học");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -312,7 +334,7 @@ public class Student extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(btnAdd)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -325,7 +347,7 @@ public class Student extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(btnAdd)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -415,11 +437,11 @@ public class Student extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cboNguoiHoc;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cboCourse;
+    private javax.swing.JComboBox<String> cboThematic;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -431,8 +453,8 @@ public class Student extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblLearner;
+    private javax.swing.JTable tblStudent;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
