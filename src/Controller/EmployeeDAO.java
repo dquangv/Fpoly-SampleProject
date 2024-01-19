@@ -18,12 +18,12 @@ public class EmployeeDAO {
 
     public void insert(Employee model) throws SQLException {
         String sql = "insert into nhanvien values (?, ?, ?, ?);";
-        JdbcHelper.executeUpdate(sql, model.getMaNV(), model.getMatKhau(), model.getHoTen(), model.getVaiTro());
+        JdbcHelper.executeUpdate(sql, model.getMaNV(), model.getMatKhau(), model.getHoTen(), model.getVaiTro(), model.getEmail(), model.getSdt());
     }
 
     public void update(Employee model) throws SQLException {
         String sql = "update nhanvien set matkhau = ?, hovaten = ?, vaitro = ? where manhanvien = ?;";
-        JdbcHelper.executeUpdate(sql, model.getMatKhau(), model.getHoTen(), model.getVaiTro(), model.getMaNV());
+        JdbcHelper.executeUpdate(sql, model.getMatKhau(), model.getHoTen(), model.getVaiTro(), model.getMaNV(), model.getEmail(), model.getSdt());
     }
 
     public void delete(String maNV) throws SQLException {
@@ -38,6 +38,8 @@ public class EmployeeDAO {
         model.setMatKhau(rs.getString("matkhau"));
         model.setHoTen(rs.getString("hovaten"));
         model.setVaiTro(rs.getBoolean("vaitro"));
+        model.setEmail(rs.getString("email"));
+        model.setSdt(rs.getString("sdt"));
 
         return model;
     }

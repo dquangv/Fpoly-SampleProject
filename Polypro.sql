@@ -54,7 +54,9 @@ create table nhanvien (
 	manhanvien varchar(10) primary key not null,
 	matkhau varchar(20) not null,
 	hovaten nvarchar(50) not null,
-	vaitro bit default 0
+	vaitro bit default 0,
+	email varchar(50),
+	SDT varchar(13)
 );
 go
 
@@ -174,9 +176,9 @@ insert into chuyende values
 go
 
 insert into nhanvien values
-	(N'QuangVD', '123456', N'Vũ Đăng Quang', 1),
-	(N'NgocTTM', '123456', N'Trương Thị Minh Ngọc', 1),
-	(N'LongVH', '123456', N'Vũ Hoàng Long', 0);
+	(N'QuangVD', '123456', N'Vũ Đăng Quang', 1, 'quangvdps36680@fpt.edu.vn', '0101010101'),
+	(N'NgocTTM', '123456', N'Trương Thị Minh Ngọc', 1, 'dquangvu7998@gmail.com', '0202020202'),
+	(N'LongVH', '123456', N'Vũ Hoàng Long', 0, 'vudangquang7799@gmail.com', '0303030303');
 go
 
 insert into nguoihoc values
