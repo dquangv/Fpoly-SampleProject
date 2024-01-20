@@ -26,6 +26,21 @@ create table nguoihoc (
 );
 go
 
+create table nguoihoc_format (
+	manguoihoc varchar(10) primary key not null,
+	hovaten nvarchar(50) not null,
+	ngaysinh date not null,
+	gioitinh bit default 0,
+	sodienthoai varchar(15) not null,
+	email varchar(50) not null,
+	ghichu nvarchar(200),
+	manhanvien varchar(10) not null,
+	ngaydangky date default getdate(),
+	ngaysinh_format varchar(20),
+	ngaydangky_format varchar(20)
+);
+go
+
 create table chuyende (
 	machuyende varchar(10) primary key not null,
 	tenchuyende nvarchar(50) unique not null,
@@ -150,6 +165,36 @@ begin
 	order by hv.diemtrungbinh desc
 end;
 go
+
+/*
+create trigger tg_NguoiHoc_AfterInsert
+on nguoihoc
+after insert
+as
+begin
+	update nh
+	set ngaysinh = format(i.ngaysinh, 'dd/MM/yyyy'),
+		ngaydangky = format(i.ngaydangky, 'dd/MM/yyyy')
+	from nguoihoc nh
+	inner join inserted i
+	on nh.manguoihoc = i.manguoihoc;
+end;
+go
+
+create trigger tg_KhoaHoc_AfterInsert
+on khoahoc
+after insert
+as
+begin
+	update kh
+	set ngaykhaigiang = format(i.ngaykhaigiang, 'dd/MM/yyyy'),
+		ngaytao = format(i.ngaytao, 'dd/MM/yyyy')
+	from khoahoc kh
+	inner join inserted i
+	on i.makhoahoc = kh.makhoahoc;
+end;
+go
+*/
 
 insert into chuyende values
 	(N'JAV01', N'Lập trình Java cơ bản', 300, 90, N'GAME.png', N'JAV01 - Lập trình Java cơ bản'),
@@ -281,4 +326,9 @@ insert into hocvien (mahocvien, makhoahoc, manguoihoc, diemtrungbinh) values
 go
 
 set identity_insert hocvien off;
+go
+
+insert into nguoihoc_format
+select *, format(ngaysinh, 'dd/MM/yyyy'), format(ngaydangky, 'dd/MM/yyyy') as ngaydk
+from nguoihoc;
 go

@@ -41,7 +41,13 @@ public class Employee extends javax.swing.JDialog {
         List<Model.Employee> list = dao.select();
 
         for (Model.Employee emp : list) {
-            Object[] row = {emp.getMaNV(), emp.getMatKhau(), emp.getHoTen(), emp.isVaiTro() ? "Nhân viên" : "Trưởng phòng", emp.getEmail(), emp.getSdt()};
+            String hidePassword = "";
+
+            for (int i = 0; i < emp.getMatKhau().length(); i++) {
+                hidePassword += "*";
+            }
+            
+            Object[] row = {emp.getMaNV(), hidePassword, emp.getHoTen(), emp.isVaiTro() ? "Nhân viên" : "Trưởng phòng", emp.getEmail(), emp.getSdt()};
             model.addRow(row);
         }
     }
@@ -92,7 +98,7 @@ public class Employee extends javax.swing.JDialog {
             rdoNhanVien.setSelected(false);
             rdoTruongPhong.setSelected(true);
         }
-        
+
         txtEmail.setText(model.getEmail());
         txtSDT.setText(model.getSdt());
     }

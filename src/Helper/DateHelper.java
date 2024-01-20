@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class DateHelper {
 
-    static final SimpleDateFormat date_formater = new SimpleDateFormat("MM/dd/yyyy");
+    static final SimpleDateFormat date_formater = new SimpleDateFormat("dd/MM/yyyy");
 
     public static Date now() {
         return new Date();

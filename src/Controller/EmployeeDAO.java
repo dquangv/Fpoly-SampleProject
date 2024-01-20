@@ -22,8 +22,8 @@ public class EmployeeDAO {
     }
 
     public void update(Employee model) throws SQLException {
-        String sql = "update nhanvien set matkhau = ?, hovaten = ?, vaitro = ? where manhanvien = ?;";
-        JdbcHelper.executeUpdate(sql, model.getMatKhau(), model.getHoTen(), model.getVaiTro(), model.getMaNV(), model.getEmail(), model.getSdt());
+        String sql = "update nhanvien set matkhau = ?, hovaten = ?, vaitro = ?, email = ?, sdt = ? where manhanvien = ?;";
+        JdbcHelper.executeUpdate(sql, model.getMatKhau(), model.getHoTen(), model.getVaiTro(),model.getEmail(), model.getSdt(), model.getMaNV());
     }
 
     public void delete(String maNV) throws SQLException {
@@ -44,7 +44,7 @@ public class EmployeeDAO {
         return model;
     }
 
-    private List<Employee> select(String sql, Object... args) {
+    public List<Employee> select(String sql, Object... args) {
         List<Employee> list = new ArrayList<>();
 
         try {
@@ -79,11 +79,11 @@ public class EmployeeDAO {
         return list.size() > 0 ? list.get(0) : null;
     }
     
-    public String selectPasswordByEmail(String email) {
-        String sql = "select matkhau from nhanvien where email = ?;";
+    public String selectPasswordByEmail(String email, String manhanvien) {
+        String sql = "select matkhau from nhanvien where email = ? and manhanvien = ?;";
         
         try {
-            ResultSet rs = JdbcHelper.executeQuery(sql, email);
+            ResultSet rs = JdbcHelper.executeQuery(sql, email, manhanvien);
             
             if (rs.next()) {
                 return rs.getString("matkhau");
@@ -91,7 +91,7 @@ public class EmployeeDAO {
             
             rs.getStatement().getConnection().close();
             
-            return "Email này đã không được đăng ký trong hệ thống";
+            return null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

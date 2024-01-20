@@ -4,6 +4,7 @@
  */
 package View;
 
+import Controller.EmployeeDAO;
 import Helper.ShareHelper;
 import java.security.SecureRandom;
 import java.util.Properties;
@@ -21,18 +22,18 @@ import javax.mail.internet.MimeMultipart;
 import javax.swing.JOptionPane;
 import javax.activation.DataHandler;
 
-
 /**
  *
  * @author Quang
  */
 public class ForgotPassword extends javax.swing.JDialog {
 
+    EmployeeDAO dao = new EmployeeDAO();
     public static final String LOWERCASE_CHARS = "abcdefghijklmnopqrstuvwxyz";
     public static final String UPPERCASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static final String DIGITS = "0123456789";
     public static final String SPECIAL_CHARS = "!@#$%^&*()-_=+[]{}|;:'\",.<>/?";
-    
+
     /**
      * Creates new form ForgotPassword
      */
@@ -42,8 +43,6 @@ public class ForgotPassword extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setIconImage(ShareHelper.appIcon());
     }
-
-    
 
     public static String generatePassword() {
         SecureRandom random = new SecureRandom();
@@ -80,11 +79,22 @@ public class ForgotPassword extends javax.swing.JDialog {
     }
 
     public void getMatKhau() {
+        String taiKhoan = txtTenDN.getText();
         String toEmail = txtEmail.getText();
 //        String ccEmail = txtCCEmail.getText();
 //        String bccEmail = txtBCCEmail.getText();
 //        String subject = txtSubject.getText();
 //        String message = txtMessage.getText();
+
+        if (dao.findById(taiKhoan) == null) {
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập không tồn tại!");
+            return;
+        }
+
+        if (dao.selectPasswordByEmail(toEmail, taiKhoan) == null) {
+            JOptionPane.showMessageDialog(this, "Email không khớp với tài khoản đã đăng ký!");
+            return;
+        }
 
         Properties p = new Properties();
         p.put("mail.smtp.auth", "true");
@@ -108,7 +118,12 @@ public class ForgotPassword extends javax.swing.JDialog {
         });
 
         try {
-            String message = generatePassword();
+            String newPassword = generatePassword();
+            String message = "Mật khẩu mới của bạn là: " + newPassword;
+            Model.Employee emp = dao.select("select * from nhanvien where manhanvien = ?", taiKhoan).get(0);
+            System.out.println(emp);
+            emp.setMatKhau(newPassword);
+            dao.update(emp);
 
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(accountName));
@@ -126,7 +141,6 @@ public class ForgotPassword extends javax.swing.JDialog {
 //            FileDataSource fileDataSource = new FileDataSource(filePath);
 //            attachmentPart.setDataHandler(new DataHandler(fileDataSource));
 //            attachmentPart.setFileName(fileDataSource.getName());
-
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(textPart);
 //            multipart.addBodyPart(attachmentPart);
@@ -136,7 +150,7 @@ public class ForgotPassword extends javax.swing.JDialog {
             Transport.send(msg);
 
             JOptionPane.showMessageDialog(this, "Mật khẩu mới đã được gửi đi. Vui lòng kiểm tra email!");
-        } catch (MessagingException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
