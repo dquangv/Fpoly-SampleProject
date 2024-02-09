@@ -150,6 +150,7 @@ public class ForgotPassword extends javax.swing.JDialog {
             Transport.send(msg);
 
             JOptionPane.showMessageDialog(this, "Mật khẩu mới đã được gửi đi. Vui lòng kiểm tra email!");
+            this.dispose();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

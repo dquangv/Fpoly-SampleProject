@@ -8,6 +8,19 @@ import Controller.EmployeeDAO;
 import Helper.DialogHelper;
 import Helper.ShareHelper;
 import Model.Employee;
+import javax.swing.JDialog;
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
+import java.awt.image.BufferedImage;
+import javax.swing.JOptionPane;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import java.awt.*;
 
 /**
  *
@@ -16,7 +29,7 @@ import Model.Employee;
 public class LogIn extends javax.swing.JDialog {
 
     EmployeeDAO dao = new EmployeeDAO();
-    
+
     /**
      * Creates new form LogIn
      */
@@ -25,17 +38,17 @@ public class LogIn extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
     }
-    
-    private void login() {
+
+    public void login() {
         String maNV = txtMaNV.getText();
         String matKhau = new String(txtMatKhau.getPassword());
-        
+
         try {
             Employee emp = dao.findById(maNV);
-            
+
             if (emp != null) {
                 String matKhau2 = emp.getMatKhau();
-                
+
                 if (matKhau.equals(matKhau2)) {
                     ShareHelper.user = emp;
                     DialogHelper.alert(this, "Đăng nhập thành công!");
@@ -50,11 +63,27 @@ public class LogIn extends javax.swing.JDialog {
             ex.printStackTrace();
         }
     }
-    
+
+    public void loadToLogin(String qr) {
+        String[] taikhoanCheck = qr.split("-");
+
+        txtMaNV.setText(taikhoanCheck[0]);
+        txtMatKhau.setText(taikhoanCheck[1]);
+
+        login();
+    }
+
     private void exit() {
         if (DialogHelper.confirm(this, "Bạn có chắc muốn thoát ứng dụng không?")) {
             System.exit(0);
         }
+    }
+
+    public void loginQRCode() {
+        ReadQRCode qr = new ReadQRCode(this, true);
+
+        qr.setParentLogin(this);
+        qr.setVisible(true);
     }
 
     /**
@@ -75,6 +104,7 @@ public class LogIn extends javax.swing.JDialog {
         btnDangNhap = new javax.swing.JButton();
         btnKetThuc = new javax.swing.JButton();
         btnQuenMK = new javax.swing.JButton();
+        btnQRCode = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("HỆ THỐNG QUẢN LÝ ĐÀO TẠO");
@@ -115,6 +145,13 @@ public class LogIn extends javax.swing.JDialog {
             }
         });
 
+        btnQRCode.setText("QR Code");
+        btnQRCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQRCodeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,23 +159,21 @@ public class LogIn extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMaNV)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtMatKhau)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnDangNhap)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnKetThuc)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnQuenMK)))
-                            .addGap(0, 0, Short.MAX_VALUE))))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnQuenMK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDangNhap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnQRCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnKetThuc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(txtMatKhau)
+                    .addComponent(txtMaNV))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,8 +192,12 @@ public class LogIn extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDangNhap)
-                    .addComponent(btnKetThuc)
-                    .addComponent(btnQuenMK)))
+                    .addComponent(btnQRCode))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnQuenMK)
+                    .addComponent(btnKetThuc))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -174,9 +213,13 @@ public class LogIn extends javax.swing.JDialog {
 
     private void btnQuenMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuenMKActionPerformed
         ForgotPassword fgPass = new ForgotPassword(null, true);
-        
+
         fgPass.setVisible(true);
     }//GEN-LAST:event_btnQuenMKActionPerformed
+
+    private void btnQRCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQRCodeActionPerformed
+        loginQRCode();
+    }//GEN-LAST:event_btnQRCodeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,6 +266,7 @@ public class LogIn extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap;
     private javax.swing.JButton btnKetThuc;
+    private javax.swing.JButton btnQRCode;
     private javax.swing.JButton btnQuenMK;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -175,7 +175,7 @@ public class Thematic extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabs = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         lblHinh = new javax.swing.JLabel();
@@ -205,6 +205,11 @@ public class Thematic extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("QUẢN LÝ CHUYÊN ĐỀ");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel2.setText("Hình logo");
 
@@ -353,7 +358,7 @@ public class Thematic extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("CẬP NHẬT", jPanel1);
+        tabs.addTab("CẬP NHẬT", jPanel1);
 
         tblThematic.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -369,6 +374,11 @@ public class Thematic extends javax.swing.JDialog {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblThematic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblThematicMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tblThematic);
@@ -390,7 +400,7 @@ public class Thematic extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("DANH SÁCH", jPanel2);
+        tabs.addTab("DANH SÁCH", jPanel2);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
@@ -403,7 +413,7 @@ public class Thematic extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addComponent(tabs)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -415,7 +425,7 @@ public class Thematic extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1)
+                .addComponent(tabs)
                 .addContainerGap())
         );
 
@@ -445,6 +455,21 @@ public class Thematic extends javax.swing.JDialog {
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
         selectImage();
     }//GEN-LAST:event_lblHinhMouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        load();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void tblThematicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblThematicMouseClicked
+        if (evt.getClickCount() == 2) {
+            index = tblThematic.rowAtPoint(evt.getPoint());
+            
+            if (index >= 0) {
+                edit();
+                tabs.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_tblThematicMouseClicked
 
     /**
      * @param args the command line arguments
@@ -509,8 +534,8 @@ public class Thematic extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblHinh;
+    private javax.swing.JTabbedPane tabs;
     private javax.swing.JTable tblThematic;
     private javax.swing.JTextField txtHocPhi;
     private javax.swing.JTextField txtMaCD;

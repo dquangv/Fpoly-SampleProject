@@ -96,4 +96,19 @@ public class EmployeeDAO {
             throw new RuntimeException(ex);
         }
     }
+    
+//    public Employee checkAccountQR(String qr) {
+//        List<Employee> list = select();
+//        String[] listCheck = qr.split(":");
+//        
+//        if (listCheck.length == 2) {
+//            for (int i = 0; i < list.size(); i++) {
+//                if (list.get(i).getMaNV().equals(listCheck[0]) && list.get(i).getMatKhau().equals(listCheck[1])) {
+//                    return list.get(i);
+//                }
+//            }
+//        }
+//        
+//        return null;
+//    }
 }

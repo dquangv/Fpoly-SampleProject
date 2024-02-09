@@ -9,6 +9,7 @@ import Controller.StatisticsDAO;
 import Helper.ShareHelper;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -23,6 +24,7 @@ public class Statistics extends javax.swing.JDialog {
     StatisticsDAO dao = new StatisticsDAO();
     CourseDAO khdao = new CourseDAO();
     int tabIndex = 0;
+
     /**
      * Creates new form Statistics1
      */
@@ -31,94 +33,96 @@ public class Statistics extends javax.swing.JDialog {
         initComponents();
         init();
     }
-    
+
     public void init() {
         setIconImage(ShareHelper.appIcon());
         setLocationRelativeTo(null);
     }
-    
+
     public void fillComboBoxKhoaHoc() {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboKhoaHoc.getModel();
-        
+
         model.removeAllElements();
-        
+
         List<Model.Course> list = khdao.select();
-        
+
         for (Model.Course kh : list) {
             model.addElement(kh);
         }
-        
+
         cboKhoaHoc.setSelectedIndex(0);
     }
-    
+
     public void fillComboBoxNam() {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboNam.getModel();
-        
+
         model.removeAllElements();
-        
+
         List<Model.Course> list = khdao.select();
-        
+
         for (Model.Course kh : list) {
             Date ngayKG = kh.getNgayKG();
-            LocalDate localDate = ngayKG.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            int nam = localDate.getYear();
-            
+//            LocalDate localDate = ngayKG.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(ngayKG);
+//            int nam = localDate.getYear();
+            int nam = calendar.get(Calendar.YEAR);
+
             if (model.getIndexOf(nam) < 0) {
                 model.addElement(nam);
             }
         }
-        
+
         cboNam.setSelectedIndex(0);
     }
-    
+
     public void fillTableBangDiem() {
         DefaultTableModel model = (DefaultTableModel) tblBangDiem.getModel();
-        
+
         model.setRowCount(0);
-        
+
         Model.Course kh = (Model.Course) cboKhoaHoc.getSelectedItem();
-        
+
         List<Object[]> list = dao.getBangDiem(kh.getMaKH());
-        
-        for (Object[] row: list) {
+
+        for (Object[] row : list) {
             model.addRow(row);
         }
     }
-    
+
     public void fillTableNguoiHoc() {
         DefaultTableModel model = (DefaultTableModel) tblNguoiHoc.getModel();
-        
+
         model.setRowCount(0);
-        
+
         List<Object[]> list = dao.getNguoiHoc();
-        
+
         for (Object[] row : list) {
             model.addRow(row);
         }
     }
-    
+
     public void fillTableKhoaHoc() {
         DefaultTableModel model = (DefaultTableModel) tblKhoaHoc.getModel();
-        
-        
+
         model.setRowCount(0);
-        
+
         List<Object[]> list = dao.getDiemTheoChuyenDe();
-        
+
         for (Object[] row : list) {
             model.addRow(row);
         }
     }
-    
+
     public void fillTableDoanhThu() {
         DefaultTableModel model = (DefaultTableModel) tblDoanhThu.getModel();
-        
+
         model.setRowCount(0);
-        
+
         int nam = Integer.parseInt(cboNam.getSelectedItem().toString());
-        
+
         List<Object[]> list = dao.getDoanhThu(nam);
-        
+
         for (Object[] row : list) {
             model.addRow(row);
         }
@@ -140,6 +144,7 @@ public class Statistics extends javax.swing.JDialog {
         cboKhoaHoc = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblBangDiem = new javax.swing.JTable();
+        btnBangDiemChart = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblNguoiHoc = new javax.swing.JTable();
@@ -153,12 +158,23 @@ public class Statistics extends javax.swing.JDialog {
         tblDoanhThu = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 255));
         jLabel1.setText("TỔNG HỢP THỐNG KÊ");
 
         jLabel3.setText("KHOÁ HỌC:");
+
+        cboKhoaHoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboKhoaHocActionPerformed(evt);
+            }
+        });
 
         tblBangDiem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -178,6 +194,13 @@ public class Statistics extends javax.swing.JDialog {
         });
         jScrollPane3.setViewportView(tblBangDiem);
 
+        btnBangDiemChart.setText("Biểu đồ");
+        btnBangDiemChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBangDiemChartActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -189,7 +212,9 @@ public class Statistics extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboKhoaHoc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cboKhoaHoc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBangDiemChart)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -198,9 +223,10 @@ public class Statistics extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(cboKhoaHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboKhoaHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBangDiemChart))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -352,6 +378,25 @@ public class Statistics extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        fillComboBoxKhoaHoc();
+        fillComboBoxNam();
+        fillTableBangDiem();
+        fillTableNguoiHoc();
+        fillTableKhoaHoc();
+        fillTableDoanhThu();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void cboKhoaHocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKhoaHocActionPerformed
+        fillTableBangDiem();
+    }//GEN-LAST:event_cboKhoaHocActionPerformed
+
+    private void btnBangDiemChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBangDiemChartActionPerformed
+        Chart chart = new Chart(null, true);
+        
+        chart.setVisible(true);
+    }//GEN-LAST:event_btnBangDiemChartActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -363,7 +408,7 @@ public class Statistics extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -396,6 +441,7 @@ public class Statistics extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBangDiemChart;
     private javax.swing.JComboBox<String> cboKhoaHoc;
     private javax.swing.JComboBox<String> cboNam;
     private javax.swing.JLabel jLabel1;

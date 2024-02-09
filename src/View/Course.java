@@ -59,10 +59,7 @@ public class Course extends javax.swing.JDialog {
         try {
 
             Model.Thematic cd = (Model.Thematic) cboChuyenDe.getSelectedItem();
-
-            System.out.println(cd);
-            System.out.println(cd.getMaCD());
-            System.out.println(cboChuyenDe.getToolTipText());
+            
             if (cd != null) {
                 List<Model.Course> list = dao.findByChuyenDe(cd.getMaCD());
 

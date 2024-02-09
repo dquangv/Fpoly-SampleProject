@@ -28,7 +28,7 @@ public class ShareHelper {
     }
 
     public static boolean saveLogo(File file) {
-        File dir = new File("src\\Icons\\Logos",file.getName());
+        File dir = new File("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\logos",file.getName());
 
         if (!dir.exists()) {
             dir.mkdirs();
@@ -48,7 +48,7 @@ public class ShareHelper {
     }
 
     public static ImageIcon readLogo(String fileName) {
-        File path = new File("src\\Icons\\Logos", fileName);
+        File path = new File("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\logos", fileName);
         return new ImageIcon(path.getAbsolutePath());
     }
 

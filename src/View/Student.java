@@ -8,12 +8,14 @@ import Controller.CourseDAO;
 import Controller.LearnerDAO;
 import Controller.StudentDAO;
 import Controller.ThematicDAO;
+import Helper.DateHelper;
 import Helper.DialogHelper;
 import Helper.JdbcHelper;
 import Helper.ShareHelper;
 import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -57,49 +59,70 @@ public class Student extends javax.swing.JDialog {
             ex.printStackTrace();
         }
     }
-    
+
     public void fillComboBoxKhoaHoc() {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboCourse.getModel();
-        
+
         model.removeAllElements();
-        
+
         Model.Thematic cd = (Model.Thematic) cboThematic.getSelectedItem();
-        
+
         if (cd != null) {
             List<Model.Course> list = khdao.findByChuyenDe(cd.getMaCD());
-            
+
             for (Model.Course kh : list) {
                 model.addElement(kh);
             }
-            
+
             this.fillTableHocVien();
         }
     }
 
     public void fillTableHocVien() {
-//        DefaultTableModel model = (DefaultTableModel) tblStudent.getModel();
-//
-//        model.setRowCount(0);
-//
-//        try {
-//            String sql = "select hv.*, nh.hovaten from hocvien hv join nguoihoc nh on hv.manguoihoc = nh.manguoihoc where makhoahoc = ?;";
-//            ResultSet rs = JdbcHelper.executeQuery(sql, maKH);
-//
-//            while (rs.next()) {
-//                double diem = rs.getDouble("diemtrungbinh");
-//                Object[] row = {rs.getInt("mahocvien"), rs.getString("manguoihoc"), rs.getString("hovaten"), diem, false};
-//
-//                if (rdoTatCa.isSelected()) {
-//                    model.addRow(row);
-//                } else if (rdoDaNhapDiem.isSelected() && diem >= 0) {
-//                    model.addRow(row);
-//                } else if (rdoChuaNhapDiem.isSelected() && diem < 0) {
-//                    model.addRow(row);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        DefaultTableModel model = (DefaultTableModel) tblStudent.getModel();
+
+        model.setRowCount(0);
+
+        Model.Course kh = (Model.Course) cboCourse.getSelectedItem();
+
+        if (kh != null) {
+            maKH = kh.getMaKH();
+
+            try {
+                String sql = "select hv.*, nh.hovaten from hocvien hv join nguoihoc nh on hv.manguoihoc = nh.manguoihoc where makhoahoc = ?;";
+                ResultSet rs = JdbcHelper.executeQuery(sql, maKH);
+                int stt = 1;
+
+                while (rs.next()) {
+                    double diem = rs.getDouble("diemtrungbinh");
+                    Object[] row = {stt, rs.getInt("mahocvien"), rs.getString("manguoihoc"), rs.getString("hovaten"), diem};
+
+                    model.addRow(row);
+                    stt++;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    public void fillTableNguoiHoc() {
+        DefaultTableModel model = (DefaultTableModel) tblLearner.getModel();
+        
+        model.setRowCount(0);
+        
+        try {
+            String keyword = txtSearch.getText();
+            
+            List<Model.Learner> list = nhdao.selectByKeyword(keyword);
+            
+            for (Model.Learner nh : list) {
+                Object[] row = {nh.getMaNH(),nh.getHoTen(),nh.isGioiTinh() ? "Nam" : "Nữ", DateHelper.toString(nh.getNgaySinh()), nh.getDienThoai(), nh.getEmail()};
+                model.addRow(row);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 //    public void insert() {
@@ -118,7 +141,6 @@ public class Student extends javax.swing.JDialog {
 //            ex.printStackTrace();
 //        }
 //    }
-
     public void update() {
 //        for (int i = 0; i < tblStudent.getRowCount() - 1; i++) {
 //            Integer maHV = (Integer) tblStudent.getValueAt(i, 0);
@@ -170,6 +192,7 @@ public class Student extends javax.swing.JDialog {
         tblStudent = new javax.swing.JTable();
         btnUpdate = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
+        btnGuiKQ = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -179,12 +202,23 @@ public class Student extends javax.swing.JDialog {
         btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("CHUYÊN ĐỀ");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, null, null, null, new java.awt.Color(0, 0, 0)));
+
+        cboThematic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboThematicActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -209,6 +243,12 @@ public class Student extends javax.swing.JDialog {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
+        cboCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboCourseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -231,11 +271,11 @@ public class Student extends javax.swing.JDialog {
 
             },
             new String [] {
-                "STT", "MÃ HV", "MÃ NH", "HỌ TÊN", "ĐIỂM"
+                "STT", "MÃ HV", "MÃ NH", "HỌ TÊN", "ĐIỂM", "null"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -248,6 +288,8 @@ public class Student extends javax.swing.JDialog {
 
         btnRemove.setText("Xoá khỏi khoá học");
 
+        btnGuiKQ.setText("Gửi kết quả");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -258,6 +300,8 @@ public class Student extends javax.swing.JDialog {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGuiKQ)
+                        .addGap(18, 18, 18)
                         .addComponent(btnRemove)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnUpdate)))
@@ -271,7 +315,8 @@ public class Student extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate)
-                    .addComponent(btnRemove))
+                    .addComponent(btnRemove)
+                    .addComponent(btnGuiKQ))
                 .addContainerGap())
         );
 
@@ -282,6 +327,12 @@ public class Student extends javax.swing.JDialog {
         jLabel2.setText("Tìm kiếm");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -393,6 +444,26 @@ public class Student extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        fillComboBoxChuyenDe();
+        fillComboBoxKhoaHoc();
+        fillTableHocVien();
+        fillTableNguoiHoc();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void cboThematicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboThematicActionPerformed
+        fillComboBoxKhoaHoc();
+        fillTableHocVien();
+    }//GEN-LAST:event_cboThematicActionPerformed
+
+    private void cboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCourseActionPerformed
+        fillTableHocVien();
+    }//GEN-LAST:event_cboCourseActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        fillTableNguoiHoc();
+    }//GEN-LAST:event_txtSearchKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -404,7 +475,7 @@ public class Student extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -438,6 +509,7 @@ public class Student extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnGuiKQ;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cboCourse;
