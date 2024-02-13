@@ -24,6 +24,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Student extends javax.swing.JDialog {
 
+    int indexLearner = -1;
+    
     public Integer maKH;
     ThematicDAO cddao = new ThematicDAO();
     StudentDAO dao = new StudentDAO();
@@ -170,6 +172,27 @@ public class Student extends javax.swing.JDialog {
 //
 //        DialogHelper.alert(this, "Cập nhật thành công!");
     }
+    
+    
+    
+    public void addHocVien() {
+//        Course kh =  (Course) cboCourse.getSelectedItem();
+//        int[] rows = tblLearner.getSelectedRows();
+//        for (int row : rows) {
+//            String manh = (String) tblLearner.getValueAt(row, 0);
+//            Model.Student hv = new Model.Student();
+//            hv.setMaKH(k());
+//            hv.setDiem(0);
+//            hv.setMaNH(manh);
+//            hvDAO.insert(hv);
+//        }
+//        this.fillTableHocVien();
+//        this.fillTableNguoiHoc();
+    }
+    
+    public void selectLearner() {
+        indexLearner = tblLearner.getSelectedRow();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -271,11 +294,11 @@ public class Student extends javax.swing.JDialog {
 
             },
             new String [] {
-                "STT", "MÃ HV", "MÃ NH", "HỌ TÊN", "ĐIỂM", "null"
+                "STT", "MÃ HV", "MÃ NH", "HỌ TÊN", "ĐIỂM"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -367,9 +390,19 @@ public class Student extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblLearner.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLearnerMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblLearner);
 
         btnAdd.setText("Thêm vào khoá học");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -463,6 +496,14 @@ public class Student extends javax.swing.JDialog {
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         fillTableNguoiHoc();
     }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void tblLearnerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLearnerMouseClicked
+        selectLearner();
+    }//GEN-LAST:event_tblLearnerMouseClicked
 
     /**
      * @param args the command line arguments

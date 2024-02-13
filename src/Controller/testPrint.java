@@ -4,9 +4,11 @@
  */
 package Controller;
 
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.BaseFont;
@@ -87,8 +89,11 @@ public class testPrint {
 //
 //            document.close();
 
+            Image logo = Image.getInstance("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\src\\Icons\\Hinh\\fpt.png");
+            logo.setAlignment(1);
+
             Paragraph blank = new Paragraph(" ");
-            blank.setSpacingAfter(30f);
+            blank.setSpacingAfter(10f);
 
             Paragraph schoolName = new Paragraph("Polypro", new Font(baseFont, 15, Font.NORMAL, new CMYKColor(0, 60, 100, 0)));
             schoolName.setAlignment("CENTER");
@@ -111,10 +116,19 @@ public class testPrint {
             subject.setAlignment("CENTER");
             subject.setSpacingAfter(10f);
 
-            Paragraph time = new Paragraph("Given on the <b>02/2024</b>, at the FPT Polytech Ho Chi Minh City College", new Font(baseFont, 10, Font.NORMAL));
-            time.setAlignment("CENTER");
+//            Paragraph time = new Paragraph("Given on the <b>02/2024</b>, at the FPT Polytech Ho Chi Minh City College", new Font(baseFont, 10, Font.NORMAL));
+//            time.setAlignment("CENTER");
+            Chunk timeChunk = new Chunk("Given on ", new Font(baseFont, 10, Font.NORMAL));
+            Chunk boldChunk = new Chunk("02/2024", new Font(baseFont, 10, Font.BOLD));
+            Chunk place = new Chunk(", at the FPT Polytech Ho Chi Minh City College", new Font(baseFont, 10, Font.NORMAL));
+            Paragraph time = new Paragraph();
+            time.setAlignment(1);
+            time.add(timeChunk);
+            time.add(boldChunk);
+            time.add(place);
 
             document.add(blank);
+            document.add(logo);
             document.add(schoolName);
             document.add(title);
             document.add(us);
