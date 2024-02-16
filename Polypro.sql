@@ -334,3 +334,17 @@ insert into nguoihoc_format
 select *, format(ngaysinh, 'dd/MM/yyyy'), format(ngaydangky, 'dd/MM/yyyy') as ngaydk
 from nguoihoc;
 go
+
+create trigger insert_nguoihoc_format
+on nguoihoc
+after insert
+as
+begin
+    set nocount on;
+
+    -- Chèn dữ liệu vào bảng nguoihoc_format từ bảng nguoihoc
+    INSERT INTO nguoihoc_format
+    SELECT *, format(ngaysinh, 'dd/MM/yyyy'), format(ngaydangky, 'dd/MM/yyyy') as ngaydk
+    FROM inserted;
+END;
+go

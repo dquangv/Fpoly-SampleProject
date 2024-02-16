@@ -23,7 +23,7 @@ public class LearnerDAO {
 
     public void update(Learner model) throws SQLException {
         String sql = "update nguoihoc set hovaten = ?, ngaysinh = ?, gioitinh = ?, sodienthoai = ?, email = ?, ghichu = ?, manhanvien = ?, hinhanh = ? where manguoihoc = ?";
-        JdbcHelper.executeUpdate(sql, model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(),model.getHinhAnh(), model.getMaNH());
+        JdbcHelper.executeUpdate(sql, model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(), model.getHinhAnh(), model.getMaNH());
     }
 
     public void delete(String maNH) throws SQLException {
@@ -83,22 +83,40 @@ public class LearnerDAO {
 
             return select(sql, 1);
         }
-        
+
         if (keyword.equalsIgnoreCase("Nữ") || keyword.equalsIgnoreCase("N") || keyword.equalsIgnoreCase("ữ")) {
             String sql = "select * from nguoihoc where gioitinh like ?;";
 
             return select(sql, 0);
         }
-        
+
         String sql = "select * from nguoihoc_format where hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ? or manhanvien like ? or ngaysinh_format like ? or ngaydangky_format like ?;";
 
         return select(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
 
-    public List<Learner> selectByCourse(Integer maKH, String keyword) {
-        String sql = "select * from nguoihoc where hovaten like ? and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?)";
+    public List<Learner> selectByCourse(int maKH, String keyword) {
+//        String sql = "select * from nguoihoc where hovaten like ? and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?)";
+//
+//        return select(sql, "%" + keyword + "%", maKH);
 
-        return select(sql, "%" + keyword + "%", maKH);
+        if (keyword.equalsIgnoreCase("Nam") || keyword.equalsIgnoreCase("N") || keyword.equalsIgnoreCase("Na") || keyword.equalsIgnoreCase("a") || keyword.equalsIgnoreCase("m") || keyword.equalsIgnoreCase("am")) {
+            String sql = "select * from nguoihoc where gioitinh like ? and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
+
+            return select(sql, 1, maKH);
+        }
+
+        if (keyword.equalsIgnoreCase("Nữ") || keyword.equalsIgnoreCase("N") || keyword.equalsIgnoreCase("ữ")) {
+            String sql = "select * from nguoihoc where gioitinh like ? and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
+
+            return select(sql, 0, maKH);
+        }
+
+//        String sql = "select * from nguoihoc_format where (hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ? or manhanvien like ? or ngaysinh_format like ? or ngaydangky_format like ?) and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
+        String sql = "select * from nguoihoc_format where (hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ? or manhanvien like ? or ngaysinh_format like ? or ngaydangky_format like ?) and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
+
+        return select(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", maKH);
+//        return select(sql, "%" + keyword + "%", maKH);
     }
 
     public Learner findById(String maNH) {

@@ -13,7 +13,10 @@ import Helper.DialogHelper;
 import Helper.JdbcHelper;
 import Helper.ShareHelper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 public class Student extends javax.swing.JDialog {
 
     int indexLearner = -1;
-    
+
     public Integer maKH;
     ThematicDAO cddao = new ThematicDAO();
     StudentDAO dao = new StudentDAO();
@@ -107,23 +110,24 @@ public class Student extends javax.swing.JDialog {
             }
         }
     }
-    
+
     public void fillTableNguoiHoc() {
         DefaultTableModel model = (DefaultTableModel) tblLearner.getModel();
-        
+
         model.setRowCount(0);
-        
+
         try {
             String keyword = txtSearch.getText();
-            
-            List<Model.Learner> list = nhdao.selectByKeyword(keyword);
-            
+            Model.Course kh = (Model.Course) cboCourse.getSelectedItem();
+
+            List<Model.Learner> list = nhdao.selectByCourse(kh.getMaKH(), keyword);
+
             for (Model.Learner nh : list) {
-                Object[] row = {nh.getMaNH(),nh.getHoTen(),nh.isGioiTinh() ? "Nam" : "Nữ", DateHelper.toString(nh.getNgaySinh()), nh.getDienThoai(), nh.getEmail()};
+                Object[] row = {nh.getMaNH(), nh.getHoTen(), nh.isGioiTinh() ? "Nam" : "Nữ", DateHelper.toString(nh.getNgaySinh()), nh.getDienThoai(), nh.getEmail()};
                 model.addRow(row);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -172,9 +176,7 @@ public class Student extends javax.swing.JDialog {
 //
 //        DialogHelper.alert(this, "Cập nhật thành công!");
     }
-    
-    
-    
+
     public void addHocVien() {
 //        Course kh =  (Course) cboCourse.getSelectedItem();
 //        int[] rows = tblLearner.getSelectedRows();
@@ -188,11 +190,40 @@ public class Student extends javax.swing.JDialog {
 //        }
 //        this.fillTableHocVien();
 //        this.fillTableNguoiHoc();
+
+        if (indexLearner == -1) {
+            System.out.println("Vui lòng chọn học viên");
+        } else {
+            List<Model.Student> list = dao.select();
+            int maHVCuoiCung = list.get(list.size() - 1).getMaHV();
+            
+            System.out.println(maHVCuoiCung);
+            Model.Course kh = (Model.Course) cboCourse.getSelectedItem();
+            int maKH = kh.getMaKH();
+            String maNH = (String) tblLearner.getValueAt(indexLearner, 0);
+
+            Model.Student student = new Model.Student(maHVCuoiCung + 1, maKH, maNH);
+
+            try {
+                dao.insert(student);
+                fillTableHocVien();
+                fillTableNguoiHoc();
+                tabs.setSelectedIndex(0);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
-    
+
     public void selectLearner() {
         indexLearner = tblLearner.getSelectedRow();
+        System.out.println(indexLearner);
     }
+    
+    public void deleteStudent() {
+        
+    };
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -209,7 +240,7 @@ public class Student extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         cboCourse = new javax.swing.JComboBox<>();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabs = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblStudent = new javax.swing.JTable();
@@ -298,7 +329,7 @@ public class Student extends javax.swing.JDialog {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -310,6 +341,11 @@ public class Student extends javax.swing.JDialog {
         btnUpdate.setText("Cập nhật điểm");
 
         btnRemove.setText("Xoá khỏi khoá học");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         btnGuiKQ.setText("Gửi kết quả");
 
@@ -343,7 +379,7 @@ public class Student extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("HỌC VIÊN", jPanel4);
+        tabs.addTab("HỌC VIÊN", jPanel4);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -435,7 +471,7 @@ public class Student extends javax.swing.JDialog {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("NGƯỜI HỌC", jPanel5);
+        tabs.addTab("NGƯỜI HỌC", jPanel5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -445,7 +481,7 @@ public class Student extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1)
+                        .addComponent(tabs)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -470,7 +506,7 @@ public class Student extends javax.swing.JDialog {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -487,10 +523,12 @@ public class Student extends javax.swing.JDialog {
     private void cboThematicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboThematicActionPerformed
         fillComboBoxKhoaHoc();
         fillTableHocVien();
+        fillTableNguoiHoc();
     }//GEN-LAST:event_cboThematicActionPerformed
 
     private void cboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCourseActionPerformed
         fillTableHocVien();
+        fillTableNguoiHoc();
     }//GEN-LAST:event_cboCourseActionPerformed
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
@@ -498,12 +536,16 @@ public class Student extends javax.swing.JDialog {
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // TODO add your handling code here:
+        addHocVien();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void tblLearnerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLearnerMouseClicked
         selectLearner();
     }//GEN-LAST:event_tblLearnerMouseClicked
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        deleteStudent();
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -565,7 +607,7 @@ public class Student extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane tabs;
     private javax.swing.JTable tblLearner;
     private javax.swing.JTable tblStudent;
     private javax.swing.JTextField txtSearch;
