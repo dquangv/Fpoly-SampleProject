@@ -12,6 +12,7 @@ import Helper.DateHelper;
 import Helper.DialogHelper;
 import Helper.JdbcHelper;
 import Helper.ShareHelper;
+import static View.ForgotPassword.generatePassword;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
@@ -26,8 +27,19 @@ import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -302,10 +314,96 @@ public class Student extends javax.swing.JDialog {
     }
 
     public void sendMail(Model.Student student) {
+//        String taiKhoan = txtTenDN.getText();
+//        String toEmail = txtEmail.getText();
+//        String ccEmail = txtCCEmail.getText();
+//        String bccEmail = txtBCCEmail.getText();
+//        String subject = txtSubject.getText();
+//        String message = txtMessage.getText();
+
+          Model.Learner nguoiHoc = nhdao.findById(student.getMaNH());
+          String toEmail = nguoiHoc.getEmail();
+
+//        if (dao.findById(taiKhoan) == null) {
+//            JOptionPane.showMessageDialog(this, "Tên đăng nhập không tồn tại!");
+//            return;
+//        }
+//
+//        if (dao.selectPasswordByEmail(toEmail, taiKhoan) == null) {
+//            JOptionPane.showMessageDialog(this, "Email không khớp với tài khoản đã đăng ký!");
+//            return;
+//        }
+
+        Properties p = new Properties();
+        p.put("mail.smtp.auth", "true");
+        p.put("mail.smtp.starttls.enable", "true");
+        p.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        p.put("mail.smtp.host", "smtp.gmail.com");
+        p.put("mail.smtp.port", 587);
+        p.put("mail.debug", "true");
+
+//        String accountName = txtUsername.getText();
+//        String accountPass = new String(txtPassword.getPassword());
+        String accountName = "vudangquang7799@gmail.com";
+        String accountPass = "puzqujlhitmyceos";
+
+        Session session = Session.getInstance(p, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(accountName, accountPass);
+//                  rvdcqfzztbbniwsp (bobvu7799)
+//                  puzqujlhitmyceos (vudangquang7799)
+            }
+        });
+
+        try {
+//            String newPassword = generatePassword();
+//            String message = "Mật khẩu mới của bạn là: " + newPassword;
+//            Model.Employee emp = dao.select("select * from nhanvien where manhanvien = ?", taiKhoan).get(0);
+//            System.out.println(emp);
+//            emp.setMatKhau(newPassword);
+//            dao.update(emp);
+
+            Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(accountName));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+//            msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
+//            msg.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bccEmail));
+            msg.setSubject("EDUSYS - LẤY LẠI MẬT KHẨU");
+
+            MimeBodyPart textPart = new MimeBodyPart();
+
+//            textPart.setText(message);
+
+//            MimeBodyPart attachmentPart = new MimeBodyPart();
+//            String filePath = selectedFile.getAbsolutePath();
+//            FileDataSource fileDataSource = new FileDataSource(filePath);
+//            attachmentPart.setDataHandler(new DataHandler(fileDataSource));
+//            attachmentPart.setFileName(fileDataSource.getName());
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(textPart);
+//            multipart.addBodyPart(attachmentPart);
+
+            msg.setContent(multipart);
+
+            Transport.send(msg);
+
+            JOptionPane.showMessageDialog(this, "Mật khẩu mới đã được gửi đi. Vui lòng kiểm tra email!");
+            this.dispose();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void certification(Model.Student student) {
         Document document = new Document(PageSize.A6.rotate(), 10, 10, 0, 10);
         try {
             String khoaHoc = (String) cboCourse.getSelectedItem();
             String maNH = student.getMaNH();
+            Model.Learner nguoiHoc = nhdao.findById(maNH);
+            String hoTen = nguoiHoc.getHoTen();
+            String chuyenDe = (String) cboThematic.getSelectedItem();
+            Model.Course kh = (Model.Course) cboCourse.getSelectedItem();
+            String ngayKG = String.valueOf(kh.getNgayKG());
 
             //Tạo đối tượng PDFWriter
             PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\certifications\\" + khoaHoc + "\\" + maNH + ".pdf"));
@@ -382,7 +480,7 @@ public class Student extends javax.swing.JDialog {
             Paragraph us = new Paragraph("WE HEREBY RECOGNIZE", new Font(baseFont, 10, Font.NORMAL));
             us.setAlignment("CENTER");
 
-            Paragraph studentName = new Paragraph("Vũ Đăng Quang", new Font(baseFont, 30, Font.BOLD, new CMYKColor(0, 60, 100, 0)));
+            Paragraph studentName = new Paragraph(hoTen, new Font(baseFont, 30, Font.BOLD, new CMYKColor(0, 60, 100, 0)));
             studentName.setAlignment("CENTER");
 //            studentName.setSpacingBefore(10f);
 
@@ -390,14 +488,14 @@ public class Student extends javax.swing.JDialog {
             archievement.setAlignment("CENTER");
             archievement.setSpacingBefore(10f);
 
-            Paragraph subject = new Paragraph("DATA SCIENCE", new Font(baseFont, 15, Font.BOLD, new CMYKColor(0, 60, 100, 0)));
+            Paragraph subject = new Paragraph(chuyenDe, new Font(baseFont, 15, Font.BOLD, new CMYKColor(0, 60, 100, 0)));
             subject.setAlignment("CENTER");
             subject.setSpacingAfter(10f);
 
 //            Paragraph time = new Paragraph("Given on the <b>02/2024</b>, at the FPT Polytech Ho Chi Minh City College", new Font(baseFont, 10, Font.NORMAL));
 //            time.setAlignment("CENTER");
             Chunk timeChunk = new Chunk("Given on ", new Font(baseFont, 10, Font.NORMAL));
-            Chunk boldChunk = new Chunk("02/2024", new Font(baseFont, 10, Font.BOLD));
+            Chunk boldChunk = new Chunk(ngayKG, new Font(baseFont, 10, Font.BOLD));
             Chunk place = new Chunk(", at the FPT Polytech Ho Chi Minh City College", new Font(baseFont, 10, Font.NORMAL));
             Paragraph time = new Paragraph();
             time.setAlignment(1);
