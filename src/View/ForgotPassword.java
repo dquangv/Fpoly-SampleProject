@@ -106,14 +106,15 @@ public class ForgotPassword extends javax.swing.JDialog {
 
 //        String accountName = txtUsername.getText();
 //        String accountPass = new String(txtPassword.getPassword());
-        String accountName = "bobvu7799@gmail.com";
-        String accountPass = "rvdcqfzztbbniwsp";
+        String accountName = "vudangquang7799@gmail.com";
+        String accountPass = "fgzbcgkaumowrjuw";
 
         Session session = Session.getInstance(p, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(accountName, accountPass);
 //                  rvdcqfzztbbniwsp (bobvu7799)
-//                  puzqujlhitmyceos (vudangquang7799)
+//                  puzqujlhitmyceos (vudangquang7799) - pass sai
+//                  fgzbcgkaumowrjuw (vudangquang7799)
             }
         });
 

@@ -113,9 +113,9 @@ public class LearnerDAO {
         }
 
 //        String sql = "select * from nguoihoc_format where (hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ? or manhanvien like ? or ngaysinh_format like ? or ngaydangky_format like ?) and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
-        String sql = "select * from nguoihoc_format where (hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ? or manhanvien like ? or ngaysinh_format like ? or ngaydangky_format like ?) and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
+        String sql = "select * from nguoihoc_format where (hovaten like ? or manguoihoc like ? or sodienthoai like ? or email like ?  or ngaysinh_format like ? or ngaydangky_format like ?) and manguoihoc not in (select manguoihoc from hocvien where makhoahoc = ?);";
 
-        return select(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", maKH);
+        return select(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", maKH);
 //        return select(sql, "%" + keyword + "%", maKH);
     }
 

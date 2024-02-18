@@ -22,6 +22,8 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.CMYKColor;
 import com.lowagie.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
@@ -30,6 +32,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -299,7 +303,9 @@ public class Student extends javax.swing.JDialog {
         int check = 0;
 
         for (int i = 0; i < tblStudent.getRowCount(); i++) {
-            double diem = (double) tblStudent.getValueAt(i, 4);
+            int maHV = (int) tblStudent.getValueAt(i, 1);
+            Model.Student student = dao.findById(maHV);
+            double diem = student.getDiem();
 
             if (diem == -1) {
                 check++;
@@ -309,7 +315,14 @@ public class Student extends javax.swing.JDialog {
         }
 
         if (check == 0) {
-            System.out.println("a");
+            Model.Course kh = (Model.Course) cboCourse.getSelectedItem();
+            List<Model.Student> list = dao.findByKhoaHoc(kh.getMaKH());
+
+            for (Model.Student student : list) {
+                sendMail(student);
+            }
+
+            JOptionPane.showMessageDialog(this, "Đã gửi kết quả thành công");
         }
     }
 
@@ -319,10 +332,25 @@ public class Student extends javax.swing.JDialog {
 //        String ccEmail = txtCCEmail.getText();
 //        String bccEmail = txtBCCEmail.getText();
 //        String subject = txtSubject.getText();
-//        String message = txtMessage.getText();
 
-          Model.Learner nguoiHoc = nhdao.findById(student.getMaNH());
-          String toEmail = nguoiHoc.getEmail();
+        if (student.getDiem() >= 5) {
+            Model.Learner nguoiHoc = nhdao.findById(student.getMaNH());
+            String toEmail = nguoiHoc.getEmail();
+
+            String message = "Kính gửi " + nguoiHoc.getHoTen() + ",\n"
+                    + "\n"
+                    + "Chúc mừng bạn đã hoàn thành khoá học " + cboThematic.getSelectedItem() + " tại Trung tâm Tin Học Văn Phòng Polypro! Chúng tôi rất vui mừng và tự hào về sự nỗ lực và cam kết của bạn trong suốt thời gian học.\n"
+                    + "\n"
+                    + "Bạn đã thể hiện sự chuyên nghiệp và sự quyết tâm trong việc hoàn thành các bài tập và dự án, và chúng tôi tin rằng những kiến thức và kỹ năng mà bạn đã học sẽ giúp bạn thành công không chỉ trong lĩnh vực học tập mà còn trong sự nghiệp và cuộc sống cá nhân.\n"
+                    + "\n"
+                    + "Chúng tôi hy vọng rằng bạn đã tận hưởng và học hỏi được nhiều điều từ khoá học của chúng tôi. Đồng thời, chúng tôi cũng mong muốn được gặp lại bạn trong các khoá học tương lai hoặc trong bất kỳ dịp nào khác tại Trung tâm Tin Học Văn Phòng.\n"
+                    + "\n"
+                    + "Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu hỗ trợ nào, xin đừng ngần ngại liên hệ với chúng tôi. Chúng tôi luôn sẵn lòng hỗ trợ bạn.\n"
+                    + "\n"
+                    + "Một lần nữa, chúc mừng và cảm ơn bạn đã là một phần của cộng đồng học viên của chúng tôi.\n"
+                    + "\n"
+                    + "Trân trọng,\n"
+                    + "Trung tâm Tin Học Văn Phòng Polypro.";
 
 //        if (dao.findById(taiKhoan) == null) {
 //            JOptionPane.showMessageDialog(this, "Tên đăng nhập không tồn tại!");
@@ -333,29 +361,29 @@ public class Student extends javax.swing.JDialog {
 //            JOptionPane.showMessageDialog(this, "Email không khớp với tài khoản đã đăng ký!");
 //            return;
 //        }
-
-        Properties p = new Properties();
-        p.put("mail.smtp.auth", "true");
-        p.put("mail.smtp.starttls.enable", "true");
-        p.put("mail.smtp.ssl.protocols", "TLSv1.2");
-        p.put("mail.smtp.host", "smtp.gmail.com");
-        p.put("mail.smtp.port", 587);
-        p.put("mail.debug", "true");
+            Properties p = new Properties();
+            p.put("mail.smtp.auth", "true");
+            p.put("mail.smtp.starttls.enable", "true");
+            p.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            p.put("mail.smtp.host", "smtp.gmail.com");
+            p.put("mail.smtp.port", 587);
+            p.put("mail.debug", "true");
 
 //        String accountName = txtUsername.getText();
 //        String accountPass = new String(txtPassword.getPassword());
-        String accountName = "vudangquang7799@gmail.com";
-        String accountPass = "puzqujlhitmyceos";
+            String accountName = "vudangquang7799@gmail.com";
+            String accountPass = "fgzbcgkaumowrjuw";
 
-        Session session = Session.getInstance(p, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(accountName, accountPass);
+            Session session = Session.getInstance(p, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(accountName, accountPass);
 //                  rvdcqfzztbbniwsp (bobvu7799)
-//                  puzqujlhitmyceos (vudangquang7799)
-            }
-        });
+//                  puzqujlhitmyceos (vudangquang7799) - pass sai
+//                  fgzbcgkaumowrjuw (vudangquang7799)
+                }
+            });
 
-        try {
+            try {
 //            String newPassword = generatePassword();
 //            String message = "Mật khẩu mới của bạn là: " + newPassword;
 //            Model.Employee emp = dao.select("select * from nhanvien where manhanvien = ?", taiKhoan).get(0);
@@ -363,50 +391,116 @@ public class Student extends javax.swing.JDialog {
 //            emp.setMatKhau(newPassword);
 //            dao.update(emp);
 
-            Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(accountName));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+                Message msg = new MimeMessage(session);
+                msg.setFrom(new InternetAddress(accountName));
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
 //            msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 //            msg.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bccEmail));
-            msg.setSubject("EDUSYS - LẤY LẠI MẬT KHẨU");
+                msg.setSubject("POLYPRO - TRUNG TÂM TIN HỌC VĂN PHÒNG");
 
-            MimeBodyPart textPart = new MimeBodyPart();
+                MimeBodyPart textPart = new MimeBodyPart();
 
-//            textPart.setText(message);
+                textPart.setText(message);
 
-//            MimeBodyPart attachmentPart = new MimeBodyPart();
-//            String filePath = selectedFile.getAbsolutePath();
-//            FileDataSource fileDataSource = new FileDataSource(filePath);
-//            attachmentPart.setDataHandler(new DataHandler(fileDataSource));
-//            attachmentPart.setFileName(fileDataSource.getName());
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(textPart);
-//            multipart.addBodyPart(attachmentPart);
+                MimeBodyPart attachmentPart = new MimeBodyPart();
 
-            msg.setContent(multipart);
+                String filePath = certification(student).getAbsolutePath();
+                FileDataSource fileDataSource = new FileDataSource(filePath);
+                attachmentPart.setDataHandler(new DataHandler(fileDataSource));
+                attachmentPart.setFileName(fileDataSource.getName());
 
-            Transport.send(msg);
+                Multipart multipart = new MimeMultipart();
+                multipart.addBodyPart(textPart);
+                multipart.addBodyPart(attachmentPart);
 
-            JOptionPane.showMessageDialog(this, "Mật khẩu mới đã được gửi đi. Vui lòng kiểm tra email!");
-            this.dispose();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+                msg.setContent(multipart);
+
+                Transport.send(msg);
+
+//            JOptionPane.showMessageDialog(this, "Kết quả đã được gửi đi thành công");
+//            JOptionPane.showMessageDialog(this, "Mật khẩu mới đã được gửi đi. Vui lòng kiểm tra email!");
+//            this.dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            Model.Learner nguoiHoc = nhdao.findById(student.getMaNH());
+            String toEmail = nguoiHoc.getEmail();
+
+            String message = "Kính gửi " + nguoiHoc.getHoTen() + ",\n"
+                    + "\n"
+                    + "Chúng tôi xin thông báo với bạn về kết quả cuối cùng của khoá học " + cboThematic.getSelectedItem() + " mà bạn đã tham gia tại Trung tâm Tin Học Văn Phòng. Đầu tiên, chúng tôi muốn gửi lời cảm ơn sâu sắc đến bạn về sự nỗ lực và cam kết mà bạn đã dành cho khoá học này.\n"
+                    + "\n"
+                    + "Tuy nhiên, sau quá trình đánh giá kỹ lưỡng, chúng tôi nhận thấy rằng điểm số của bạn (" + student.getDiem() + " điểm) không đạt yêu cầu để nhận được chứng chỉ từ trung tâm. Đây không phải là một tin tức dễ chịu, và chúng tôi hiểu rằng có thể đây là một thách thức đối với bạn.\n"
+                    + "\n"
+                    + "Xin đừng để điều này làm mất đi niềm đam mê và quyết tâm của bạn. Khoá học đã cung cấp cho bạn cơ hội để học hỏi và phát triển, và những bài học bạn đã học sẽ tiếp tục là một phần quan trọng trong sự phát triển cá nhân và sự nghiệp của bạn trong tương lai.\n"
+                    + "\n"
+                    + "Chúng tôi muốn khuyến khích bạn tiếp tục học hỏi và phát triển bản thân. Đôi khi, thất bại không phải là điều cuối cùng, mà chỉ là một bước tiếp theo trên con đường của sự thành công. Hãy sử dụng kinh nghiệm này như một động lực để nỗ lực và cố gắng hơn trong những cơ hội tiếp theo.\n"
+                    + "\n"
+                    + "Nếu bạn có bất kỳ câu hỏi hoặc cần sự hỗ trợ từ chúng tôi, xin đừng ngần ngại liên hệ. Chúng tôi luôn sẵn lòng hỗ trợ bạn trong bất kỳ cách nào mà chúng tôi có thể.\n"
+                    + "\n"
+                    + "Chúng tôi hy vọng sẽ có cơ hội được hợp tác với bạn trong tương lai.\n"
+                    + "\n"
+                    + "Trân trọng,\n"
+                    + "Nhân viên Trung tâm Tin Học Văn Phòng";
+
+            Properties p = new Properties();
+            p.put("mail.smtp.auth", "true");
+            p.put("mail.smtp.starttls.enable", "true");
+            p.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            p.put("mail.smtp.host", "smtp.gmail.com");
+            p.put("mail.smtp.port", 587);
+            p.put("mail.debug", "true");
+
+            String accountName = "vudangquang7799@gmail.com";
+            String accountPass = "fgzbcgkaumowrjuw";
+
+            Session session = Session.getInstance(p, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(accountName, accountPass);
+//                  rvdcqfzztbbniwsp (bobvu7799)
+//                  puzqujlhitmyceos (vudangquang7799) - pass sai
+//                  fgzbcgkaumowrjuw (vudangquang7799)
+                }
+            });
+
+            try {
+                Message msg = new MimeMessage(session);
+                msg.setFrom(new InternetAddress(accountName));
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+                msg.setSubject("POLYPRO - TRUNG TÂM TIN HỌC VĂN PHÒNG");
+                msg.setText(message);
+
+                Transport.send(msg);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
-    public void certification(Model.Student student) {
+    public File certification(Model.Student student) {
+        File pdfFile = null;
         Document document = new Document(PageSize.A6.rotate(), 10, 10, 0, 10);
+
         try {
-            String khoaHoc = (String) cboCourse.getSelectedItem();
+            Model.Course khoaHoc = (Model.Course) cboCourse.getSelectedItem();
+            String tenKH = khoaHoc.getMaCD();
             String maNH = student.getMaNH();
             Model.Learner nguoiHoc = nhdao.findById(maNH);
             String hoTen = nguoiHoc.getHoTen();
-            String chuyenDe = (String) cboThematic.getSelectedItem();
+            Model.Thematic chuyenDe = (Model.Thematic) cboThematic.getSelectedItem();
+            String tenCD = chuyenDe.getTenCD();
             Model.Course kh = (Model.Course) cboCourse.getSelectedItem();
             String ngayKG = String.valueOf(kh.getNgayKG());
 
+            // Thay đổi cách tạo PdfWriter để thay vì ghi trực tiếp vào FileOutputStream,
+            // chúng ta sẽ sử dụng ByteArrayOutputStream để ghi vào bộ nhớ đệm.
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
             //Tạo đối tượng PDFWriter
-            PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\certifications\\" + khoaHoc + "\\" + maNH + ".pdf"));
+//            PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\certifications\\" + khoaHoc + "\\" + maNH + ".pdf"));
+            PdfWriter.getInstance(document, baos);
 
             //Mở file để thực hiện ghi
             document.open();
@@ -488,7 +582,7 @@ public class Student extends javax.swing.JDialog {
             archievement.setAlignment("CENTER");
             archievement.setSpacingBefore(10f);
 
-            Paragraph subject = new Paragraph(chuyenDe, new Font(baseFont, 15, Font.BOLD, new CMYKColor(0, 60, 100, 0)));
+            Paragraph subject = new Paragraph(tenCD, new Font(baseFont, 15, Font.BOLD, new CMYKColor(0, 60, 100, 0)));
             subject.setAlignment("CENTER");
             subject.setSpacingAfter(10f);
 
@@ -514,9 +608,36 @@ public class Student extends javax.swing.JDialog {
             document.add(time);
 
             document.close();
+
+            // Sau khi tạo PDF trong bộ nhớ đệm, chúng ta có thể chuyển nó thành một mảng byte
+            byte[] pdfBytes = baos.toByteArray();
+
+            // Tạo đường dẫn cho thư mục certifications
+            String directoryPath = "C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\certifications\\" + tenKH;
+
+            // Tạo đối tượng File cho thư mục certifications
+            File directory = new File(directoryPath);
+
+            // Nếu thư mục không tồn tại, tạo mới
+            if (!directory.exists()) {
+                directory.mkdirs(); // Tạo thư mục và tất cả các thư mục cha cần thiết
+            }
+
+            // Tạo đường dẫn cho tệp PDF
+            String pdfPath = directoryPath + "\\" + maNH + ".pdf";
+
+            // Tạo một File từ mảng byte này
+            pdfFile = new File(pdfPath);
+
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            fos.write(pdfBytes);
+            fos.close();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        return pdfFile;
     }
 
     /**
