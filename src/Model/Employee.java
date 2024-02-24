@@ -10,20 +10,29 @@ package Model;
  */
 public class Employee {
 
-    private String maNV, matKhau, hoTen, email, sdt;
+    private String maNV, matKhau, hoTen, email, sdt, tinhTrang;
     private boolean vaiTro = false;
 
     public Employee() {
     }
 
-    public Employee(String maNV, String matKhau, String hoTen, String email, String sdt) {
+    public Employee(String maNV, String matKhau, String hoTen, String email, String sdt, String tinhTrang) {
         this.maNV = maNV;
         this.matKhau = matKhau;
         this.hoTen = hoTen;
         this.email = email;
         this.sdt = sdt;
+        this.tinhTrang = tinhTrang;
     }
-    
+
+    public String getTinhTrang() {
+        return tinhTrang;
+    }
+
+    public void setTinhTrang(String tinhTrang) {
+        this.tinhTrang = tinhTrang;
+    }
+
     public String getEmail() {
         return email;
     }

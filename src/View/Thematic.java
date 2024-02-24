@@ -7,8 +7,12 @@ package View;
 import Controller.ThematicDAO;
 import Helper.DialogHelper;
 import Helper.ShareHelper;
+import java.awt.Image;
 import java.io.File;
 import java.util.List;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,6 +32,7 @@ public class Thematic extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         init();
+        setStatus(true);
     }
 
     public void init() {
@@ -84,6 +89,7 @@ public class Thematic extends javax.swing.JDialog {
         btnInsert.setEnabled(check);
         btnUpdate.setEnabled(!check);
         btnDelete.setEnabled(!check);
+//        btnClear.setEnabled(!check);
 
         boolean first = this.index > 0;
         boolean last = this.index < tblThematic.getRowCount() - 1;
@@ -97,6 +103,10 @@ public class Thematic extends javax.swing.JDialog {
     public void clear() {
         this.setModel(new Model.Thematic());
         this.setStatus(true);
+        lblHinh.setIcon(null);
+        lblHinh.setText("Ảnh");
+        txtThoiLuong.setText(null);
+        txtHocPhi.setText(null);
     }
 
     public void insert() {
@@ -156,9 +166,22 @@ public class Thematic extends javax.swing.JDialog {
     public void selectImage() {
         JFileChooser imageChooser = new JFileChooser();
 
+        imageChooser.setCurrentDirectory(new File("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\logos"));
+        
         if (imageChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = imageChooser.getSelectedFile();
 
+            ImageIcon img = new ImageIcon(file.getAbsolutePath());
+            int labelWidth = lblHinh.getWidth();
+            int labelHeight = lblHinh.getHeight();
+            Image scaledImg = img.getImage().getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
+            ImageIcon imgIcon = new ImageIcon(scaledImg);
+            
+            lblHinh.setIcon(imgIcon);
+            
+            System.out.println(labelHeight);
+            System.out.println(labelWidth);
+            
             if (ShareHelper.saveLogo(file)) {
                 lblHinh.setIcon(ShareHelper.readLogo(file.getName()));
                 lblHinh.setToolTipText(file.getName());
@@ -236,12 +259,32 @@ public class Thematic extends javax.swing.JDialog {
         jScrollPane1.setViewportView(txtMoTa);
 
         btnInsert.setText("Thêm");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Xoá");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Sửa");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnClear.setText("Mới");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         btnFirst.setText("|<");
         btnFirst.addActionListener(new java.awt.event.ActionListener() {
@@ -340,7 +383,7 @@ public class Thematic extends javax.swing.JDialog {
                         .addComponent(jLabel7)
                         .addGap(16, 16, 16)
                         .addComponent(txtHocPhi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblHinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblHinh, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -396,7 +439,7 @@ public class Thematic extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -470,6 +513,22 @@ public class Thematic extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_tblThematicMouseClicked
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clear();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        insert();
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        delete();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        update();
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
      * @param args the command line arguments

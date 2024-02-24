@@ -38,7 +38,7 @@ public class Course extends javax.swing.JDialog {
         fillComboBox();
         load();
         tabs.setSelectedIndex(1);
-        decentralization();
+//        decentralization();
     }
 
     public void decentralization() {
@@ -59,7 +59,7 @@ public class Course extends javax.swing.JDialog {
         try {
 
             Model.Thematic cd = (Model.Thematic) cboChuyenDe.getSelectedItem();
-            
+
             if (cd != null) {
                 List<Model.Course> list = dao.findByChuyenDe(cd.getMaCD());
 
@@ -89,12 +89,13 @@ public class Course extends javax.swing.JDialog {
         Model.Course model = new Model.Course();
         Model.Thematic thematic = (Model.Thematic) cboChuyenDe.getSelectedItem();
 
-        if (txtMaNV.getText().equals("")) {
-            model.setMaNV(ShareHelper.user.getMaNV());
-        } else {
-            model.setMaNV(txtMaNV.getText());
-        }
-
+//        if (txtMaNV.getText().equals("")) {
+//            model.setMaNV(ShareHelper.user.getMaNV());
+//        } else {
+//            model.setMaNV(txtMaNV.getText());
+//        }
+        
+        model.setMaNV(txtMaNV.getText());
         model.setMaCD(thematic.getMaCD());
         model.setNgayKG(dayNgayKG.getDate());
         model.setHocPhi(Double.parseDouble(txtHocPhi.getText()));
@@ -124,7 +125,7 @@ public class Course extends javax.swing.JDialog {
         dayNgayTao.setDate(new Date());
         dayNgayKG.setDate(null);
         index = -1;
-        txtMaNV.setText(ShareHelper.user.getMaNV());
+//        txtMaNV.setText(ShareHelper.user.getMaNV());
         setStatus(true);
     }
 
@@ -141,8 +142,8 @@ public class Course extends javax.swing.JDialog {
             index = 0;
             setStatus(false);
         }
-        
-        decentralization();
+
+//        decentralization();
     }
 
     public void fillComboBox() {
@@ -286,8 +287,6 @@ public class Course extends javax.swing.JDialog {
         jLabel5.setText("Thời lượng (giờ)");
 
         jLabel6.setText("Người tạo");
-
-        txtMaNV.setEditable(false);
 
         jLabel7.setText("Ngày tạo");
 
@@ -586,8 +585,8 @@ public class Course extends javax.swing.JDialog {
                 this.edit();
                 tabs.setSelectedIndex(0);
             }
-            
-            decentralization();
+
+//            decentralization();
         }
     }//GEN-LAST:event_tblCourseMouseClicked
 

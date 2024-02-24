@@ -17,13 +17,13 @@ import java.util.List;
 public class EmployeeDAO {
 
     public void insert(Employee model) throws SQLException {
-        String sql = "insert into nhanvien values (?, ?, ?, ?);";
-        JdbcHelper.executeUpdate(sql, model.getMaNV(), model.getMatKhau(), model.getHoTen(), model.getVaiTro(), model.getEmail(), model.getSdt());
+        String sql = "insert into nhanvien values (?, ?, ?, ?, ?, ?, ?);";
+        JdbcHelper.executeUpdate(sql, model.getMaNV(), model.getMatKhau(), model.getHoTen(), model.getVaiTro(), model.getEmail(), model.getSdt(), model.getTinhTrang());
     }
 
     public void update(Employee model) throws SQLException {
-        String sql = "update nhanvien set matkhau = ?, hovaten = ?, vaitro = ?, email = ?, sdt = ? where manhanvien = ?;";
-        JdbcHelper.executeUpdate(sql, model.getMatKhau(), model.getHoTen(), model.getVaiTro(),model.getEmail(), model.getSdt(), model.getMaNV());
+        String sql = "update nhanvien set matkhau = ?, hovaten = ?, vaitro = ?, email = ?, sdt = ?, tinhtranggiadinh = ? where manhanvien = ?;";
+        JdbcHelper.executeUpdate(sql, model.getMatKhau(), model.getHoTen(), model.getVaiTro(),model.getEmail(), model.getSdt(), model.getTinhTrang(), model.getMaNV());
     }
 
     public void delete(String maNV) throws SQLException {
@@ -40,6 +40,7 @@ public class EmployeeDAO {
         model.setVaiTro(rs.getBoolean("vaitro"));
         model.setEmail(rs.getString("email"));
         model.setSdt(rs.getString("sdt"));
+        model.setTinhTrang(rs.getString("tinhtranggiadinh"));
 
         return model;
     }

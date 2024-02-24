@@ -30,16 +30,20 @@ public class ShareHelper {
     public static boolean saveLogo(File file) {
         File dir = new File("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\logos",file.getName());
 
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+//        if (!dir.exists()) {
+//            dir.mkdirs();
+//        }
 
-        File newFile = new File(dir, file.getName());
+        File newFile = new File("C:\\Users\\Quang\\OneDrive - FPT Polytechnic\\Desktop\\fpl\\hk4\\duanmau\\official\\lab\\Polypro\\logos", file.getName());
+//        System.out.println(dir.getAbsolutePath());
+//        System.out.println(newFile.getAbsolutePath());
 
         try {
             Path source = Paths.get(file.getAbsolutePath());
             Path destination = Paths.get(newFile.getAbsolutePath());
             Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+//            System.out.println(source);
+//            System.out.println(destination);
 
             return true;
         } catch (Exception ex) {
