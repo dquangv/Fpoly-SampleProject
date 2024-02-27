@@ -14,12 +14,13 @@ public class Course {
     private int maKH, thoiLuong;
     private String maCD, ghiChu, maNV;
     private double hocPhi;
-    private Date ngayKG, ngayTao = Helper.DateHelper.now();
+    private Date ngayKG;
+    private Date ngayTao;
 
     public Course() {
     }
 
-    public Course(int maKH, int thoiLuong, String maCD, String ghiChu, String maNV, double hocPhi, Date ngayKG) {
+    public Course(int maKH, int thoiLuong, String maCD, String ghiChu, String maNV, double hocPhi, Date ngayKG, Date ngayTao) {
         this.maKH = maKH;
         this.thoiLuong = thoiLuong;
         this.maCD = maCD;
@@ -27,6 +28,7 @@ public class Course {
         this.maNV = maNV;
         this.hocPhi = hocPhi;
         this.ngayKG = ngayKG;
+        this.ngayTao = ngayTao;
     }
 
     public int getMaKH() {

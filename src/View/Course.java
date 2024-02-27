@@ -9,6 +9,9 @@ import Controller.ThematicDAO;
 import Helper.DateHelper;
 import Helper.DialogHelper;
 import Helper.ShareHelper;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -94,7 +97,6 @@ public class Course extends javax.swing.JDialog {
 //        } else {
 //            model.setMaNV(txtMaNV.getText());
 //        }
-        
         model.setMaNV(txtMaNV.getText());
         model.setMaCD(thematic.getMaCD());
         model.setNgayKG(dayNgayKG.getDate());
@@ -102,8 +104,10 @@ public class Course extends javax.swing.JDialog {
         model.setThoiLuong(Integer.parseInt(txtThoiLuong.getText()));
         model.setGhiChu(txtGhiChu.getText());
         model.setNgayTao(dayNgayTao.getDate());
-//        model.setMaKH(Integer.parseInt(cboChuyenDe.getToolTipText()));
+        System.out.println(dayNgayKG.getDate());
+        System.out.println(dayNgayTao.getDate());
 
+//        model.setMaKH(Integer.parseInt(cboChuyenDe.getToolTipText()));
         return model;
     }
 
@@ -166,8 +170,26 @@ public class Course extends javax.swing.JDialog {
     public void insert() {
         Model.Course model = getModel();
 
-        model.setNgayTao(new Date());
-
+//        model.setNgayTao(new Date());
+////        Date today = new Date();
+//////        System.out.println(today.);
+////        System.out.println(model.getNgayTao());
+////        Calendar today = Calendar.getInstance();
+////        int year = today.get(Calendar.YEAR);
+////        int month = today.get(Calendar.MONTH);
+////        int day = today.get(Calendar.DAY_OF_MONTH);
+////        
+////        Calendar newCalendar = Calendar.getInstance();
+////        newCalendar.set(year, month, day);
+////        Date now = newCalendar.getTime();
+////        System.out.println(now);
+//        LocalDate currentDate = LocalDate.now();
+//        int year = currentDate.getYear();
+//        int month = currentDate.getMonthValue();
+//        int day = currentDate.getDayOfMonth();
+//
+//        Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//        System.out.println(date);
         try {
             dao.insert(model);
             this.load();
@@ -276,7 +298,7 @@ public class Course extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel1.setText("CHUYÊN ĐỀ");
+        jLabel1.setText("KHOÁ HỌC");
 
         jLabel2.setText("Chuyên đề");
 
@@ -353,6 +375,8 @@ public class Course extends javax.swing.JDialog {
                 btnLastActionPerformed(evt);
             }
         });
+
+        txtChuyenDe.setEditable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

@@ -85,12 +85,14 @@ public class Learner extends javax.swing.JDialog {
 
         model.setMaNH(txtMaNH.getText());
         model.setHoTen(txtHoTen.getText());
-        model.setGioiTinh(cbbNam.isSelected());
+        model.setGioiTinh(!cbbNam.isSelected());
         model.setNgaySinh(dayNgaySinh.getDate());
         model.setDienThoai(txtDienThoai.getText());
         model.setEmail(txtEmail.getText());
         model.setGhiChu(txtGhiChu.getText());
-        model.setMaNV(ShareHelper.user.getMaNV());
+//        model.setMaNV(ShareHelper.user.getMaNV());
+        model.setMaNV("QuangVD");
+
         model.setNgayDK(DateHelper.now());
         model.setHinhAnh(pathImage);
 
@@ -100,9 +102,13 @@ public class Learner extends javax.swing.JDialog {
     public void clear() {
         Model.Learner model = new Model.Learner();
 
-        model.setMaNH(ShareHelper.user.getMaNV());
+//        model.setMaNV(ShareHelper.user.getMaNV());
+        model.setGioiTinh(true);
+        model.setMaNV(null);
+        
         model.setNgayDK(DateHelper.now());
         this.setModel(model);
+        this.setStatus(true);
         lblHinhAnh.setText("Hình ảnh");
     }
 
@@ -128,6 +134,7 @@ public class Learner extends javax.swing.JDialog {
             dao.insert(model);
             this.load();
             this.clear();
+            System.out.println(model.getHoTen());
             DialogHelper.alert(this, "Thêm mới thành công!");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -514,7 +521,7 @@ public class Learner extends javax.swing.JDialog {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -548,7 +555,7 @@ public class Learner extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

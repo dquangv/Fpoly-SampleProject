@@ -17,13 +17,13 @@ import java.util.List;
 public class CourseDAO {
 
     public void insert(Course model) throws SQLException {
-        String sql = "insert into khoahoc values (machuyende, hocphi, thoiluong, ngaykhaigiang, ghichu, manhanvien) (?, ?, ?, ?, ?, ?);";
-        JdbcHelper.executeUpdate(sql, model.getMaCD(), model.getHocPhi(), model.getThoiLuong(), model.getNgayKG(), model.getGhiChu(), model.getMaNV());
+        String sql = "insert into khoahoc values (machuyende, hocphi, thoiluong, ngaykhaigiang, ghichu, manhanvien, ngaytao) (?, ?, ?, ?, ?, ?, ?);";
+        JdbcHelper.executeUpdate(sql, model.getMaCD(), model.getHocPhi(), model.getThoiLuong(), model.getNgayKG(), model.getGhiChu(), model.getMaNV(), model.getNgayTao());
     }
 
     public void update(Course model) throws SQLException {
-        String sql = "update khoahoc set machuyende = ?, hocphi = ?, thoiluong = ?, ngaykhaigiang = ?, ghichu = ?, manhanvien = ? where makhoahoc = ?;";
-        JdbcHelper.executeUpdate(sql, model.getMaCD(), model.getHocPhi(), model.getThoiLuong(), model.getNgayKG(), model.getGhiChu(), model.getMaNV(), model.getMaKH());
+        String sql = "update khoahoc set machuyende = ?, hocphi = ?, thoiluong = ?, ngaykhaigiang = ?, ghichu = ?, manhanvien = ?, ngaytao = ? where makhoahoc = ?;";
+        JdbcHelper.executeUpdate(sql, model.getMaCD(), model.getHocPhi(), model.getThoiLuong(), model.getNgayKG(), model.getGhiChu(), model.getMaNV(), model.getNgayTao(), model.getMaKH());
     }
 
     public void delete(int maKH) throws SQLException {

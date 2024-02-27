@@ -11,14 +11,14 @@ import java.util.Date;
  * @author Quang
  */
 public class Learner {
-    private String maNH, hoTen, dienThoai, email, ghiChu, maNV, hinhAnh;
+    private String maNH, hoTen, dienThoai, email, ghiChu, maNV, hinhAnh, trinhDo;
     private boolean gioiTinh;
     private Date ngaySinh, ngayDK = Helper.DateHelper.now();
 
     public Learner() {
     }
 
-    public Learner(String maNH, String hoTen, String dienThoai, String email, String ghiChu, String maNV, String hinhAnh, boolean gioiTinh, Date ngaySinh) {
+    public Learner(String maNH, String hoTen, String dienThoai, String email, String ghiChu, String maNV, String hinhAnh, String trinhDo, boolean gioiTinh, Date ngaySinh) {
         this.maNH = maNH;
         this.hoTen = hoTen;
         this.dienThoai = dienThoai;
@@ -26,8 +26,17 @@ public class Learner {
         this.ghiChu = ghiChu;
         this.maNV = maNV;
         this.hinhAnh = hinhAnh;
+        this.trinhDo = trinhDo;
         this.gioiTinh = gioiTinh;
         this.ngaySinh = ngaySinh;
+    }
+
+    public String getTrinhDo() {
+        return trinhDo;
+    }
+
+    public void setTrinhDo(String trinhDo) {
+        this.trinhDo = trinhDo;
     }
 
     public String getHinhAnh() {

@@ -17,13 +17,13 @@ import java.util.List;
 public class LearnerDAO {
 
     public void insert(Learner model) throws SQLException {
-        String sql = "insert into nguoihoc values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        JdbcHelper.executeUpdate(sql, model.getMaNH(), model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(), model.getHinhAnh());
+        String sql = "insert into nguoihoc values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        JdbcHelper.executeUpdate(sql, model.getMaNH(), model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(), model.getNgayDK(), model.getHinhAnh(), model.getTrinhDo());
     }
 
     public void update(Learner model) throws SQLException {
-        String sql = "update nguoihoc set hovaten = ?, ngaysinh = ?, gioitinh = ?, sodienthoai = ?, email = ?, ghichu = ?, manhanvien = ?, hinhanh = ? where manguoihoc = ?";
-        JdbcHelper.executeUpdate(sql, model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(), model.getHinhAnh(), model.getMaNH());
+        String sql = "update nguoihoc set hovaten = ?, ngaysinh = ?, gioitinh = ?, sodienthoai = ?, email = ?, ghichu = ?, manhanvien = ?, hinhanh = ?, ngaydangky = ?, trinhdo = ? where manguoihoc = ?";
+        JdbcHelper.executeUpdate(sql, model.getHoTen(), model.getNgaySinh(), model.getGioiTinh(), model.getDienThoai(), model.getEmail(), model.getGhiChu(), model.getMaNV(), model.getHinhAnh(), model.getNgayDK(), model.getTrinhDo(), model.getMaNH());
     }
 
     public void delete(String maNH) throws SQLException {
@@ -44,6 +44,7 @@ public class LearnerDAO {
         model.setMaNV(rs.getString("manhanvien"));
         model.setNgayDK(rs.getDate("ngaydangky"));
         model.setHinhAnh(rs.getString("hinhanh"));
+        model.setTrinhDo(rs.getString("trinhdo"));
 
         return model;
     }
